@@ -701,8 +701,8 @@ async function sbRest(path, opts = {}){
 /* ---------- 数据 ---------- */
 const LISTS = {inbox:['收件箱','#9a7b2f'], work:['工作','#3a6ea5'], life:['生活','#c0613a'], study:['学习','#2f6f5e']};
 const PRI = {high:['高','#d64545'], medium:['中','#c98a12'], low:['低','#8e9aaf'], none:['','#d1d1d6']};
-// 项目状态用分类色板的前五个槽位，按固定顺序分配（图表和标签同色）
-const STATUS = [['dev','开发中','#2a78d6'], ['test','测试中','#eb6834'], ['idea','构思中','#1baf7a'], ['pause','暂停','#eda100'], ['live','已上线','#e87ba4']];
+// 项目状态用分类色板的前六个槽位，按固定顺序分配（图表和标签同色）
+const STATUS = [['dev','开发中','#2a78d6'], ['test','测试中','#eb6834'], ['idea','构思中','#1baf7a'], ['pause','暂停','#eda100'], ['live','已上线','#e87ba4'], ['hw','作业','#6250d6']];
 const ST = Object.fromEntries(STATUS.map(s => [s[0], s]));
 const KEYS = ['station-projects', 'station-wishes', 'station-settings', 'station-goals', 'station-reviews', 'station-services', 'station-notes', 'station-ideas'];
 let data = {'station-projects': store.get('station-projects', []), 'station-wishes': store.get('station-wishes', []), 'station-settings': store.get('station-settings', {budget: 0}),
