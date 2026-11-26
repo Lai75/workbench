@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我的工作台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: 简易、安静、好读；像一张整洁的桌面
+   IDEA: 后台“工作台”：左侧栏切换五个页面，第一页是总览
+   PICTURE: 总览顶部四个数字，下面是“接下来要做”“项目进展”“心愿预算”
+   COLOUR and TYPE: 近白 #f7f7f5，白卡片，墨色 #1d1d1f，细线 #e8e8e4，唯一强调色墨绿 #2f6f5e；Inter 数字 + Noto Sans SC
+   LAYOUT: 左侧栏 220px + 内容区；手机上侧栏变成底部标签栏 */
+:root{color-scheme:light;--bg:#f7f7f5;--card:#fff;--ink:#1d1d1f;--muted:#6e6e73;--faint:#a1a1a6;--line:#e8e8e4;--soft:#f2f2ef;
+  --acc:#2f6f5e;--red:#d64545;--blue:#3a6ea5;--yellow:#c98a12;--green:#2f6f5e;--pink:#b0558f;--bad:#d64545;--warn:#c98a12}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans SC",system-ui,sans-serif;overflow-x:clip}
+.num{font-family:"Inter","Noto Sans SC",sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:6px}
+[hidden]{display:none!important}
+
+/* 框架 */
+.app{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--card);border-right:1px solid var(--line);padding:22px 12px;display:flex;flex-direction:column;gap:2px}
+.brand{font-weight:700;font-size:18px;padding:0 12px 18px}
+.side a{display:flex;align-items:center;gap:12px;padding:0 12px;min-height:42px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:15px}
+.side a svg{width:18px;height:18px;flex:none}
+.side a:hover{background:var(--soft);color:var(--ink)}
+.side a.on{background:var(--soft);color:var(--ink);font-weight:600}
+.side .cnt{margin-left:auto;font-size:12px;color:var(--faint);font-weight:400}
+.side .foot2{margin-top:auto;padding:12px;font-size:12px;color:var(--faint);line-height:1.5}
+main{padding:clamp(20px,3vw,36px) clamp(16px,3vw,40px) 64px;max-width:1200px;width:100%}
+.page{display:none}.page.on{display:grid;gap:20px}
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font-size:clamp(24px,3vw,32px);line-height:1.25;font-weight:700;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.ph p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px}
+
+/* 统计 */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;text-decoration:none}
+.stat:hover{border-color:#d4d4cf}
+.stat .k{font-size:14px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.stat .k svg{width:18px;height:18px;color:var(--c)}
+.stat .v{font-size:clamp(26px,3vw,34px);font-weight:600;line-height:1.15;margin-top:6px;white-space:nowrap;letter-spacing:-.02em}
+.stat .v small{font-size:.5em;font-weight:500;color:var(--muted);margin-right:4px}
+.stat .s{font-size:13px;color:var(--faint)}
+.c-red{--c:var(--red)}.c-yellow{--c:var(--yellow)}.c-blue{--c:var(--blue)}.c-green{--c:var(--green)}
+
+/* 两栏与面板 */
+.cols{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;align-items:start}
+.col{display:grid;gap:20px}
+.panel .hd{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px 12px}
+.panel h2{margin:0;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
+.panel h2 .tag{font-size:13px;font-weight:400;color:var(--faint)}
+.more{font-size:14px;color:var(--acc);text-decoration:none}.more:hover{text-decoration:underline}
+.btn{border:1px solid var(--line);border-radius:8px;min-height:36px;padding:0 12px;font-size:14px;font-weight:500;background:var(--card);display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.primary:hover{background:#333}
+.empty{padding:28px 20px;text-align:center;color:var(--faint);font-size:15px}
+.notice{padding:18px 20px;color:var(--muted);font-size:15px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+
+/* 列表行 */
+.row{display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 20px;border-top:1px solid var(--line)}
+.row .dot{width:7px;height:7px;border-radius:50%;margin-top:9px}
+.row.done .t{color:var(--faint);text-decoration:line-through}
+.t{overflow-wrap:anywhere}
+.meta{display:flex;flex-wrap:wrap;gap:0 12px;font-size:13px;color:var(--muted)}
+.meta a{color:var(--acc);text-decoration:none}.meta a:hover{text-decoration:underline}
+.grp{padding:14px 20px 6px;font-size:13px;color:var(--faint);border-top:1px solid var(--line)}
+.grp:first-child{border-top:0}
+.grp+.row{border-top:0}
+
+/* 项目 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:0 20px 20px}
+.proj{padding:14px 16px;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;gap:6px}
+.proj .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.proj .name{font-size:16px;font-weight:600;overflow-wrap:anywhere;line-height:1.4;margin-top:4px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+.bar{height:4px;border-radius:2px;background:var(--soft);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:2px}
+.bar.over i{background:var(--red)}
+.prow{display:flex;justify-content:space-between;font-size:13px;color:var(--faint)}
+.next{font-size:14px}.next b{color:var(--muted);font-weight:500}
+.note{font-size:13px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.mini-proj{padding:12px 20px;border-top:1px solid var(--line);display:grid;gap:2px}
+.mini-proj .line1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.mini-proj .name{font-weight:500;overflow-wrap:anywhere}
+.acts{display:flex;flex:none}
+.acts button{width:32px;height:32px;border-radius:6px;display:grid;place-items:center;color:var(--faint)}
+.acts button:hover{background:var(--soft);color:var(--ink)}
+.acts svg{width:15px;height:15px}
+@media(hover:hover){.proj .acts,tr .acts{opacity:0;transition:opacity .15s}.proj:hover .acts,.proj:focus-within .acts,tr:hover .acts,tr:focus-within .acts{opacity:1}}
+
+/* 筛选 */
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:0 20px 14px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--soft);border-radius:8px;padding:2px}
+.seg button{min-height:32px;padding:0 10px;font-size:13px;color:var(--muted);border-radius:6px}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.search{max-width:220px;min-height:36px!important;padding:6px 10px!important;font-size:15px!important}
+
+/* 想买 */
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:13px;color:var(--faint);font-weight:400;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th:first-child,td:first-child{padding-left:20px}
+th.r,td.r{text-align:right;white-space:nowrap}
+tr.done td.nm .t,tr.done td.r{color:var(--faint);text-decoration:line-through}
+.chk{width:20px;height:20px;border:1.5px solid #c7c7cc;border-radius:5px;display:grid;place-items:center}
+.chk.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chk svg{width:12px;height:12px}
+tfoot td{font-weight:600;border-bottom:0}
+.fit{font-size:12px;color:var(--acc);background:#e9f2ef;border-radius:4px;padding:0 6px;margin-left:6px;white-space:nowrap}
+.budget{padding:4px 20px 18px;display:grid;gap:6px}
+.budget .big{font-size:28px;font-weight:600;letter-spacing:-.02em;white-space:nowrap}
+.budget .sub{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* 快捷导航 */
+.nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:0 12px 14px}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;font-size:13px;color:var(--muted);padding:10px 4px;border-radius:10px;text-align:center;overflow-wrap:anywhere}
+.nav a:hover{background:var(--soft);color:var(--ink)}
+.nav .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:600;font-size:16px;background:var(--soft);color:var(--ink)}
+
+/* 动态 */
+.feed{list-style:none;margin:0;padding:0 20px 8px}
+.feed li{position:relative;padding:0 0 14px 20px;font-size:14px}
+.feed li::before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--c,var(--faint))}
+.feed li::after{content:"";position:absolute;left:5px;top:20px;bottom:2px;border-left:1px solid var(--line)}
+.feed li:last-child::after{display:none}
+.feed time{display:block;font-size:12px;color:var(--faint)}
+
+/* 设置 */
+.set{padding:0 20px 20px;display:grid;gap:12px;max-width:440px}
+.set p{margin:0;color:var(--muted);font-size:14px}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding:6px 0;border-bottom:1px solid var(--line)}
+.kv span:first-child{color:var(--muted)}
+
+/* 表单 */
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;padding:16px}
+.sheet.on{display:flex}
+.sheet form{width:min(460px,100%);max-height:calc(100vh - 32px);overflow:auto;display:grid;gap:14px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.15)}
+.sheet h3{margin:0;font-size:18px;font-weight:600}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+label{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 12px;width:100%;min-height:42px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(47,111,94,.12)}
+textarea{min-height:80px;resize:vertical}
+input[type=range]{padding:0;accent-color:var(--acc);border:0;background:none;box-shadow:none}
+.btns{display:flex;justify-content:flex-end;gap:8px}
+.err{color:var(--bad);font-size:14px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,130px);background:var(--ink);color:#fff;border-radius:10px;padding:10px 16px;display:flex;gap:14px;align-items:center;font-size:14px;transition:transform .25s;z-index:50;white-space:nowrap}
+#toast.show{transform:translate(-50%,0)}
+#toast button{color:#9fd8c5;font-weight:600}
+/* 目标 */
+.goal{padding:20px;display:grid;gap:14px}
+.goal .gt{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.goal h2{font-size:19px;margin:0;line-height:1.35;overflow-wrap:anywhere}
+.why{color:var(--muted);font-size:14px;margin-top:2px;white-space:pre-wrap;overflow-wrap:anywhere}
+.dual{display:grid;grid-template-columns:auto minmax(0,1fr) 44px;gap:6px 10px;align-items:center;font-size:13px;color:var(--muted)}
+.dual .bar{margin:0;height:6px}.dual .num{text-align:right;color:var(--ink)}
+.bar.time i{background:#c7c7cc}
+.state{display:inline-block;font-size:12px;border-radius:4px;padding:1px 8px;white-space:nowrap;background:var(--soft);color:var(--muted)}
+.state.ahead{background:#e9f2ef;color:var(--acc)}.state.behind{background:#fbeaea;color:var(--red)}
+.stage{border:1px solid var(--line);border-radius:10px}
+.stage .sh{display:flex;align-items:center;gap:10px;padding:10px 8px 10px 14px}
+.stage .ttl{font-weight:600;flex:1;overflow-wrap:anywhere}
+.stage .ttl small{font-weight:400;color:var(--faint);margin-right:6px}
+.stage .due{font-size:13px;color:var(--faint);white-space:nowrap}
+.stage .pc{font-size:13px;min-width:38px;text-align:right}
+.step{display:flex;align-items:center;gap:10px;padding:4px 8px 4px 14px;border-top:1px solid var(--line);font-size:15px;min-height:42px}
+.step .t{flex:1}
+.step.done .t{color:var(--faint);text-decoration:line-through}
+.wk{font-size:12px;border:1px dashed #d4d4cf;border-radius:4px;padding:1px 7px;color:var(--faint);white-space:nowrap}
+.wk:hover{color:var(--ink)}.wk.on{border:1px solid var(--acc);color:var(--acc);background:#e9f2ef}
+.addstep{padding:6px 14px 10px;border-top:1px solid var(--line)}
+.addstep input{min-height:36px;border-style:dashed;font-size:15px}
+@media(hover:hover){.step .acts,.sh .acts,.goal .gt .acts{opacity:0;transition:opacity .15s}.step:hover .acts,.step:focus-within .acts,.sh:hover .acts,.sh:focus-within .acts,.gt:hover .acts,.gt:focus-within .acts{opacity:1}}
+.mini-goal{padding:12px 20px;border-top:1px solid var(--line);display:grid;gap:6px}
+.mini-goal .line1{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-weight:500}
+.banner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#e9f2ef;color:var(--acc);border-radius:12px;padding:12px 18px;font-size:15px}
+.banner a{font-weight:600;color:var(--acc)}
+/* 回顾 */
+.wkbar{display:flex;align-items:center;gap:6px}
+.wkbar button{width:34px;height:34px;border:1px solid var(--line);border-radius:8px}
+.wkbar button:disabled{opacity:.35;cursor:default}
+.sum3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 20px 16px}
+.sum3>div{background:var(--soft);border-radius:10px;padding:12px 14px}
+.sum3 h3{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--muted)}
+.sum3 ul{margin:0;padding-left:18px;font-size:14px}.sum3 .none{font-size:14px;color:var(--faint)}
+.rform{padding:0 20px 20px;display:grid;gap:14px}
+.score{display:flex;gap:6px;flex-wrap:wrap}
+.score button{width:44px;height:44px;border:1px solid var(--line);border-radius:8px;font-weight:600;font-family:Inter,sans-serif}
+.score button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pick{display:grid;gap:0;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:4px}
+.pick label{display:flex;flex-direction:row;align-items:center;gap:10px;color:var(--ink);font-size:14px;padding:6px 8px;border-radius:6px;cursor:pointer}
+.pick label:hover{background:var(--soft)}
+.pick label small{color:var(--faint);margin-left:auto;white-space:nowrap}
+.pick input{width:18px;height:18px;min-height:0;accent-color:var(--acc);flex:none}
+.spark{display:flex;gap:6px;align-items:flex-end;height:84px;padding:0 20px 4px}
+.spark div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;font-size:11px;color:var(--faint)}
+.spark i{width:100%;max-width:28px;background:var(--acc);border-radius:3px 3px 0 0;opacity:.85}
+.spark i.zero{background:var(--line);height:3px!important}
+details.rv{border-top:1px solid var(--line);padding:10px 20px}
+details.rv summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;min-height:32px;align-items:center}
+details.rv p{margin:6px 0 0;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+details.rv b{font-weight:500;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:30;flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
+  .brand,.side .foot2,.side .cnt{display:none}
+  .side a{flex:1;flex-direction:column;gap:2px;justify-content:center;padding:0;min-height:54px;font-size:11px;min-width:0}
+  .sum3{grid-template-columns:minmax(0,1fr)}
+  .side a.on{background:none;color:var(--acc)}
+  main{padding-bottom:100px}
+  #toast{bottom:84px}
+}
+@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}.hide-s{display:none}td,th{padding:9px 8px}.stats{gap:10px}.stat{padding:14px}.search{max-width:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="side" id="side">
+    <div class="brand">我的工作台</div>
+    <a href="#overview" data-p="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/></svg>总览</a>
+    <a href="#goals" data-p="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>目标<span class="cnt" id="c-goals"></span></a>
+    <a href="#todos" data-p="todos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>待办<span class="cnt" id="c-todos"></span></a>
+    <a href="#projects" data-p="projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>项目<span class="cnt" id="c-projects"></span></a>
+    <a href="#wishes" data-p="wishes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 016 0"/></svg>想买<span class="cnt" id="c-wishes"></span></a>
+    <a href="#review" data-p="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h5"/></svg>回顾<span class="cnt" id="c-review"></span></a>
+    <a href="#prefs" data-p="prefs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>设置</a>
+    <div class="foot2" id="sideSync"></div>
+  </nav>
+
+  <main>
+    <!-- 总览 -->
+    <section class="page" id="p-overview">
+      <div class="ph"><div><h1 id="greet">你好</h1><p id="today"></p></div></div>
+      <div id="ovBanner"></div>
+      <div class="stats" id="stats"></div>
+      <div class="cols">
+        <div class="col">
+          <section class="box panel">
+            <div class="hd"><h2>目标进度</h2><a class="more" href="#goals">全部目标 →</a></div>
+            <div id="ovGoals"></div>
+          </section>
+          <section class="box panel">
+            <div class="hd"><h2>本周要推进 <span class="tag" id="ovWeekTag"></span></h2><a class="more" href="#goals">去挑小步骤 →</a></div>
+            <div id="ovWeek"></div>
+          </section>
+          <section class="box panel">
+            <div class="hd"><h2>接下来要做</h2><a class="more" href="#todos">全部待办 →</a></div>
+            <div id="ovTodos"></div>
+          </section>
+        </div>
+        <div class="col">
+          <section class="box panel">
+            <div class="hd"><h2>心愿预算</h2><a class="more" href="#wishes">想买清单 →</a></div>
+            <div id="ovBudget"></div>
+            <div id="ovWishes"></div>
+          </section>
+          <section class="box panel">
+            <div class="hd"><h2>项目进展</h2><a class="more" href="#projects">全部项目 →</a></div>
+            <div id="ovProjects"></div>
+          </section>
+          <section class="box panel">
+            <div class="hd"><h2>快捷导航</h2></div>
+            <div class="nav" id="nav"></div>
+          </section>
+          <section class="box panel">
+            <div class="hd"><h2>最近动态</h2></div>
+            <ul class="feed" id="feed"></ul>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- 待办 -->
+    <section class="page" id="p-todos">
+      <div class="ph"><div><h1>待办</h1><p>来自黎记，这里只能查看；修改请到黎记里操作</p></div>
+        <a class="btn" href="https://lai75.github.io/liji-app/" target="_blank" rel="noopener">在黎记里编辑 ↗</a></div>
+      <section class="box panel">
+        <div class="hd" style="padding-bottom:14px">
+          <div class="seg" id="todoSeg"><button data-f="active" class="on">进行中</button><button data-f="today">今天及逾期</button><button data-f="done">已完成</button></div>
+          <input class="search" id="todoSearch" type="search" placeholder="搜索待办">
+        </div>
+        <div class="tools" id="listChips"></div>
+        <div id="todoList"></div>
+      </section>
+    </section>
+
+    <!-- 项目 -->
+    <section class="page" id="p-projects">
+      <div class="ph"><div><h1>项目</h1><p id="projSub"></p></div><button class="btn primary" data-new="proj">＋ 新项目</button></div>
+      <section class="box panel">
+        <div class="hd"><div class="seg" id="projSeg"></div></div>
+        <div class="grid" id="projList"></div>
+      </section>
+    </section>
+
+    <!-- 想买 -->
+    <section class="page" id="p-wishes">
+      <div class="ph"><div><h1>想买</h1><p>按优先级排列，勾选即已买</p></div><button class="btn primary" data-new="wish">＋ 添加</button></div>
+      <section class="box panel">
+        <div class="hd"><h2>本月心愿预算</h2><a class="more" href="#prefs">修改预算</a></div>
+        <div id="wishBudget"></div>
+      </section>
+      <section class="box panel">
+        <div class="hd">
+          <div class="seg" id="wishSeg"><button data-f="todo" class="on">待购</button><button data-f="bought">已买</button></div>
+          <div class="seg" id="wishSort"><button data-s="pri" class="on">按优先级</button><button data-s="price">按价格</button></div>
+        </div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th style="width:44px"></th><th>东西</th><th class="hide-s">优先级</th><th class="r">价格</th><th style="width:72px"></th></tr></thead>
+          <tbody id="wishList"></tbody>
+          <tfoot><tr><td></td><td id="w-label">待购合计</td><td class="hide-s"></td><td class="r num" id="w-total"></td><td></td></tr></tfoot>
+        </table></div>
+      </section>
+    </section>
+
+    <!-- 目标 -->
+    <section class="page" id="p-goals">
+      <div class="ph"><div><h1>目标</h1><p>把长期的大目标拆成阶段和小步骤，每周挑几步来推进</p></div><button class="btn primary" id="addGoal">＋ 新目标</button></div>
+      <div id="goalList" style="display:grid;gap:20px"></div>
+    </section>
+
+    <!-- 回顾 -->
+    <section class="page" id="p-review">
+      <div class="ph"><div><h1>每周回顾</h1><p>每周花几分钟，看看离大目标又近了多少</p></div></div>
+      <section class="box panel">
+        <div class="hd"><h2 id="rvTitle"></h2><div class="wkbar"><button id="rvPrev" aria-label="上一周">‹</button><button id="rvNext" aria-label="下一周">›</button></div></div>
+        <div class="sum3" id="rvSum"></div>
+        <form class="rform" id="rvForm">
+          <label>本周做得好的<textarea id="rvGood" placeholder="这周有什么收获、完成了什么"></textarea></label>
+          <label>遇到的问题<textarea id="rvProblem" placeholder="卡住的地方、没做完的原因"></textarea></label>
+          <div style="display:grid;gap:6px"><span style="font-size:13px;color:var(--muted)" id="rvNextLabel">下周重点：从目标里挑几个小步骤</span><div class="pick" id="rvPick"></div></div>
+          <div style="display:grid;gap:6px"><span style="font-size:13px;color:var(--muted)">本周打分</span><div class="score" id="rvScore"></div></div>
+          <div><button class="btn primary" type="submit" id="rvSave">保存回顾</button></div>
+        </form>
+      </section>
+      <section class="box panel">
+        <div class="hd"><h2>最近 12 周</h2></div>
+        <div class="spark" id="rvSpark"></div>
+        <div id="rvHist"></div>
+      </section>
+    </section>
+
+    <!-- 设置 -->
+    <section class="page" id="p-prefs">
+      <div class="ph"><div><h1>设置</h1></div></div>
+      <section class="box panel">
+        <div class="hd"><h2>黎记账号</h2></div>
+        <div class="set" id="acctOut">
+          <p>用黎记的同步账号登录后，待办会显示在工作台里，项目和想买清单也会同步到云端，换设备也能看到。</p>
+          <form id="loginForm" style="display:grid;gap:10px">
+            <label>邮箱<input type="email" id="email" autocomplete="username" required></label>
+            <label>密码<input type="password" id="pass" autocomplete="current-password" required></label>
+            <div class="err" id="loginErr"></div>
+            <div><button class="btn primary" type="submit">登录</button></div>
+          </form>
+        </div>
+        <div class="set" id="acctIn" hidden>
+          <div class="kv"><span>账号</span><span id="acctEmail"></span></div>
+          <div class="kv"><span>同步状态</span><span id="syncStatus"></span></div>
+          <div style="display:flex;gap:8px"><button class="btn" id="refresh">立即同步</button><button class="btn" id="logout">退出登录</button></div>
+        </div>
+      </section>
+      <section class="box panel">
+        <div class="hd"><h2>心愿预算</h2></div>
+        <form class="set" id="budgetForm">
+          <p>每个月打算花在心愿上的钱。勾选“已买”的东西会计入当月。填 0 表示不设预算。</p>
+          <label>每月预算 (RM)<input id="budgetIn" type="number" min="0" step="1" inputmode="decimal"></label>
+          <div><button class="btn primary" type="submit">保存</button></div>
+        </form>
+      </section>
+      <section class="box panel">
+        <div class="hd"><h2>数据</h2></div>
+        <div class="set">
+          <p>复制项目、想买清单和设置的备份（JSON 文本），可以粘贴保存到任何地方。</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="copyBackup">复制备份</button><button class="btn" id="clearFeed">清空最近动态</button></div>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="sheet" id="projSheet"><form id="projForm" class="box">
+  <h3 id="projTitle">新项目</h3>
+  <label>项目名<input id="p-name" required></label>
+  <div class="two"><label>状态<select id="p-status"></select></label><label>开始日期<input id="p-start" type="date"></label></div>
+  <label>进度 <span class="num" id="p-progv">0%</span><input id="p-prog" type="range" min="0" max="100" step="5" value="0"></label>
+  <label>下一步要做<input id="p-next"></label>
+  <label>链接<input id="p-link" type="url" placeholder="https://"></label>
+  <label>备注<textarea id="p-note"></textarea></label>
+  <div class="btns"><button type="button" class="btn" data-close>取消</button><button class="btn primary" type="submit">保存</button></div>
+</form></div>
+
+<div class="sheet" id="wishSheet"><form id="wishForm" class="box">
+  <h3 id="wishTitle">添加想买的</h3>
+  <label>东西<input id="w-name" required></label>
+  <div class="two"><label>价格 (RM)<input id="w-price" type="number" min="0" step="0.01" inputmode="decimal"></label>
+  <label>优先级<select id="w-pri"><option value="high">高</option><option value="medium" selected>中</option><option value="low">低</option></select></label></div>
+  <label>购买链接<input id="w-link" type="url" placeholder="https://"></label>
+  <div class="btns"><button type="button" class="btn" data-close>取消</button><button class="btn primary" type="submit">保存</button></div>
+</form></div>
+
+<div class="sheet" id="formSheet"><form id="genForm" class="box">
+  <h3 id="genTitle"></h3>
+  <div id="genFields" style="display:grid;gap:14px"></div>
+  <div class="btns"><button type="button" class="btn" data-close>取消</button><button class="btn primary" type="submit">保存</button></div>
+</form></div>
+
+<div id="toast"></div>
+
+<script>
+{
+/* ---------- 工具 ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+const money = n => 'RM ' + (Math.round((+n || 0) * 100) / 100).toLocaleString('en-MY', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const localDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const todayStr = () => localDate(new Date());
+const daysFromToday = s => s ? Math.round((new Date(s + 'T00:00:00') - new Date(todayStr() + 'T00:00:00')) / 86400000) : null;
+const store = {
+  get(k, f){ try{ const v = localStorage.getItem(k); return v === null ? f : JSON.parse(v); }catch(e){ return f; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const ICON = {
+  edit: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10.5 2.5l3 3L6 13H3v-3z"/></svg>',
+  del: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5"/></svg>',
+  tick: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M3 8.5l3.2 3L13 4"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>',
+  bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 016 0"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',
+  step: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h5v-5h5v-5h5V5"/></svg>',
+  plus: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3v10M3 8h10"/></svg>'
+};
+let toastTimer;
+function toast(msg, undo){
+  const t = $('toast'); t.textContent = msg;
+  if(undo){ const b = document.createElement('button'); b.textContent = '撤销'; b.onclick = () => { t.classList.remove('show'); undo(); }; t.appendChild(b); }
+  t.classList.add('show'); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), undo ? 5000 : 2200);
+}
+
+/* ---------- 黎记云端（Supabase），和黎记用同一个账号 ---------- */
+const SB_URL = 'https://xmiqcomltvkbodbqaycg.supabase.co';
+const SB_KEY = 'sb_publishable_r6MiUsRs3CsmPggYhEqY0g_bh95lo5I';
+let session = store.get('shiji-session', null); // 与黎记共用：同一网站下登录一次即可
+function saveSession(s){
+  if(s && !s.expires_at) s.expires_at = Math.floor(Date.now()/1000) + (s.expires_in || 3600);
+  session = s;
+  if(s) store.set('shiji-session', s); else try{ localStorage.removeItem('shiji-session'); }catch(e){}
+}
+async function sbAuth(path, body){
+  const r = await fetch(`${SB_URL}/auth/v1/${path}`, {method:'POST', headers:{apikey:SB_KEY, 'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  const d = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(d.msg || d.error_description || d.message || ('HTTP ' + r.status));
+  return d;
+}
+async function ensureSession(){
+  session = store.get('shiji-session', session);
+  if(!session) return null;
+  if(Date.now() < (session.expires_at - 60) * 1000) return session;
+  try{ saveSession(await sbAuth('token?grant_type=refresh_token', {refresh_token: session.refresh_token})); return session; }
+  catch(e){ if(/refresh|invalid/i.test(e.message)) saveSession(null); return null; }
+}
+async function sbRest(path, opts = {}){
+  const s = await ensureSession();
+  if(!s) throw new Error('未登录');
+  const r = await fetch(`${SB_URL}/rest/v1/${path}`, {...opts, headers:{apikey:SB_KEY, Authorization:'Bearer ' + s.access_token, 'Content-Type':'application/json', ...(opts.headers || {})}});
+  if(!r.ok) throw new Error('HTTP ' + r.status);
+  const t = await r.text(); return t ? JSON.parse(t) : null;
+}
+
+/* ---------- 数据 ---------- */
+const LISTS = {inbox:['收件箱','#9a7b2f'], work:['工作','#3a6ea5'], life:['生活','#c0613a'], study:['学习','#2f6f5e']};
+const PRI = {high:['高','#d64545'], medium:['中','#c98a12'], low:['低','#8e9aaf'], none:['','#d1d1d6']};
+const STATUS = [['dev','开发中','#c98a12'], ['test','测试中','#3a6ea5'], ['idea','构思中','#b0558f'], ['pause','暂停','#a1a1a6'], ['live','已上线','#2f6f5e']];
+const ST = Object.fromEntries(STATUS.map(s => [s[0], s]));
+const KEYS = ['station-projects', 'station-wishes', 'station-settings', 'station-goals', 'station-reviews'];
+let data = {'station-projects': store.get('station-projects', []), 'station-wishes': store.get('station-wishes', []), 'station-settings': store.get('station-settings', {budget: 0}),
+  'station-goals': store.get('station-goals', []), 'station-reviews': store.get('station-reviews', {})};
+const projects = () => data['station-projects'], wishes = () => data['station-wishes'], settings = () => data['station-settings'];
+const goals = () => data['station-goals'], reviews = () => data['station-reviews'];
+let tasks = [], loggedIn = false;
+let ui = {todo: 'active', list: 'all', q: '', proj: 'all', wish: 'todo', sort: 'pri', rw: 0, score: 0};
+let editingProj = null, editingWish = null;
+let feed = store.get('station-feed', []);
+let meta = store.get('station-sync-meta', {});
+
+function log(text, color){ feed.unshift({text, color, at: Date.now()}); feed = feed.slice(0, 20); store.set('station-feed', feed); }
+function persist(key){
+  store.set(key, data[key]); meta[key] = Date.now(); store.set('station-sync-meta', meta);
+  renderAll();
+  if(loggedIn) pushKey(key).catch(() => setSync('暂存本机，联网后再同步'));
+}
+async function pushKey(key){
+  await sbRest('kv?on_conflict=user_id,key', {method:'POST', headers:{Prefer:'resolution=merge-duplicates'},
+    body: JSON.stringify([{key, value: data[key], updated_at: new Date(meta[key] || Date.now()).toISOString()}])});
+}
+function setSync(t){ $('syncStatus').textContent = t; $('sideSync').textContent = loggedIn ? t : '未登录黎记'; }
+async function sync(){
+  if(!(await ensureSession())){ setLogin(false); return; }
+  setLogin(true); setSync('同步中…');
+  try{
+    const rows = await sbRest(`kv?select=key,value,updated_at&key=in.(shiji-tasks,${KEYS.join(',')})`);
+    const cloud = Object.fromEntries(rows.map(r => [r.key, r]));
+    tasks = (cloud['shiji-tasks']?.value || []).filter(t => t && !t.del && t.title);
+    for(const key of KEYS){
+      const c = cloud[key], cloudAt = c ? Date.parse(c.updated_at) : 0, localAt = meta[key] || 0;
+      if(c && cloudAt > localAt){ data[key] = c.value; store.set(key, c.value); meta[key] = cloudAt; }
+      else if(localAt > cloudAt) await pushKey(key);
+    }
+    store.set('station-sync-meta', meta);
+    setSync('已同步 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}));
+  }catch(e){
+    setSync('同步失败：' + e.message);
+    if(e.message === '未登录') setLogin(false);
+  }
+  renderAll();
+}
+function setLogin(on){
+  loggedIn = on; if(!on) tasks = [];
+  $('acctOut').hidden = on; $('acctIn').hidden = !on;
+  $('acctEmail').textContent = session?.user?.email || '已登录';
+  if(!on) setSync('');
+  renderAll();
+}
+
+/* ---------- 计算 ---------- */
+function dueLabel(s){
+  const d = daysFromToday(s); if(d === null) return null;
+  if(d < 0) return ['逾期 ' + (-d) + ' 天', 'var(--bad)'];
+  if(d === 0) return ['今天', 'var(--warn)'];
+  if(d === 1) return ['明天', 'var(--muted)'];
+  return [d <= 7 ? d + ' 天后' : (+s.slice(5, 7)) + '月' + (+s.slice(8)) + '日', 'var(--muted)'];
+}
+const byDue = (a, b) => (a.dueDate || '9999').localeCompare(b.dueDate || '9999') || ({high:0, medium:1, low:2}[a.priority] ?? 3) - ({high:0, medium:1, low:2}[b.priority] ?? 3);
+function budgetInfo(){
+  const month = todayStr().slice(0, 7), b = +settings().budget || 0;
+  const spent = wishes().filter(w => w.bought && (w.boughtAt || '').startsWith(month)).reduce((s, w) => s + (+w.price || 0), 0);
+  return {budget: b, spent, left: b - spent, month};
+}
+function numbers(){
+  const open = tasks.filter(t => !t.completed), left = wishes().filter(w => !w.bought);
+  return {open: open.length, due: open.filter(t => t.dueDate && daysFromToday(t.dueDate) <= 0).length,
+    week: open.filter(t => t.dueDate && daysFromToday(t.dueDate) <= 7).length,
+    active: projects().filter(p => p.status === 'dev' || p.status === 'test').length, allProj: projects().length,
+    avg: projects().length ? Math.round(projects().reduce((s, p) => s + (+p.progress || 0), 0) / projects().length) : 0,
+    left: left.length, leftSum: left.reduce((s, w) => s + (+w.price || 0), 0)};
+}
+
+/* ---------- 周与目标 ---------- */
+function weekStart(offset = 0){ const x = new Date(); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - (x.getDay() + 6) % 7 + offset * 7); return x; }
+function weekKey(d){ // ISO 周，周一开始
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())), dn = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - dn);
+  const y = t.getUTCFullYear(), w = Math.ceil(((t - Date.UTC(y, 0, 1)) / 864e5 + 1) / 7);
+  return `${y}-W${String(w).padStart(2, '0')}`;
+}
+const wkOf = offset => weekKey(weekStart(offset));
+function weekRange(offset){ const s = weekStart(offset), e = new Date(s); e.setDate(e.getDate() + 6); return [localDate(s), localDate(e), s, e]; }
+const md = s => `${+s.slice(5, 7)}月${+s.slice(8)}日`;
+const inRange = (d, [a, b]) => d && d >= a && d <= b;
+function allSteps(){ return goals().flatMap(g => (g.stages || []).flatMap(s => (s.steps || []).map(st => ({g, s, st})))); }
+function stepsDone(list){ const total = list.length, done = list.filter(x => x.done).length; return {total, done, pct: total ? Math.round(done / total * 100) : 0}; }
+function goalStats(g){
+  const p = stepsDone((g.stages || []).flatMap(s => s.steps || []));
+  const start = new Date((g.start || todayStr()) + 'T00:00:00');
+  const [y, m] = (g.deadline || '').split('-').map(Number);
+  const end = y && m ? new Date(y, m, 0, 23, 59) : null;
+  const time = end ? Math.max(0, Math.min(100, Math.round((Date.now() - start) / (end - start) * 100))) : null;
+  const months = end ? Math.max(0, (end.getFullYear() - new Date().getFullYear()) * 12 + end.getMonth() - new Date().getMonth()) : null;
+  let state = ['', ''];
+  if(p.total && p.pct >= 100) state = ['已完成', 'ahead'];
+  else if(time !== null && p.total){ const d = p.pct - time; state = d > 5 ? ['进度领先', 'ahead'] : d >= -5 ? ['进度正常', ''] : [`落后 ${-d}%`, 'behind']; }
+  else if(!p.total) state = ['还没拆小步骤', ''];
+  return {...p, time, months, state};
+}
+function dual(g, gs){
+  return `<div class="dual"><span>时间</span><div class="bar time"><i style="width:${gs.time ?? 0}%"></i></div><span class="num">${gs.time ?? '–'}%</span>
+    <span>完成</span><div class="bar"><i style="width:${gs.pct}%"></i></div><span class="num">${gs.pct}%</span></div>`;
+}
+
+/* ---------- 渲染：共用片段 ---------- */
+function todoRow(t){
+  const l = LISTS[t.listId] || LISTS.inbox, p = PRI[t.priority] || PRI.none, due = dueLabel(t.dueDate);
+  const subs = Array.isArray(t.subtasks) ? t.subtasks : [];
+  return `<div class="row ${t.completed ? 'done' : ''}"><span class="dot" style="background:${p[1]}" title="${p[0] ? '优先级 ' + p[0] : '无优先级'}"></span>
+    <div><div class="t">${esc(t.title)}</div><div class="meta"><span style="color:${l[1]}">${l[0]}</span>
+    ${subs.length ? `<span>${subs.filter(s => s.done).length}/${subs.length} 子任务</span>` : ''}</div></div>
+    <span style="font-size:13px;white-space:nowrap;color:${due ? due[1] : 'var(--faint)'}">${due ? due[0] : ''}</span></div>`;
+}
+function stepRow({g, s, st}, opts = {}){
+  const wk = wkOf(0);
+  return `<div class="step ${st.done ? 'done' : ''}" data-g="${esc(g.id)}" data-s="${esc(s.id)}" data-st="${esc(st.id)}">
+    <button class="chk ${st.done ? 'on' : ''}" data-act="st-toggle" aria-label="${st.done ? '标为未完成' : '标为完成'}">${st.done ? ICON.tick : ''}</button>
+    <span class="t">${esc(st.title)}${opts.full ? '' : `<span class="meta" style="display:inline;margin-left:8px">${esc(g.title)} · ${esc(s.title)}</span>`}</span>
+    ${opts.full ? `<button class="wk ${st.week === wk ? 'on' : ''}" data-act="st-week" title="标为本周要推进">本周</button>
+      <div class="acts"><button data-act="st-edit" aria-label="编辑">${ICON.edit}</button><button data-act="st-del" aria-label="删除">${ICON.del}</button></div>` : ''}</div>`;
+}
+const loginNotice ='<div class="notice"><span>登录黎记账号后，这里会显示你的待办。</span><a class="btn" href="#prefs">去登录</a></div>';
+
+/* ---------- 渲染：总览 ---------- */
+function renderOverview(){
+  const n = numbers(), b = budgetInfo(), h = new Date().getHours();
+  const word = h < 5 ? '夜深了' : h < 11 ? '早安' : h < 13 ? '中午好' : h < 18 ? '下午好' : '晚上好';
+  $('greet').textContent = !loggedIn ? `${word}，开始今天的工作吧` : n.due ? `${word}，今天有 ${n.due} 件事要处理` : `${word}，今天没有到期的事`;
+  $('today').textContent = new Date().toLocaleDateString('zh-CN', {year:'numeric', month:'long', day:'numeric', weekday:'long'});
+  const wk = wkOf(0), focus = allSteps().filter(x => x.st.week === wk), fd = focus.filter(x => x.st.done).length;
+  const gsAll = goals().map(g => goalStats(g)), behind = gsAll.filter(s => s.state[1] === 'behind').length;
+  const gAvg = gsAll.length ? Math.round(gsAll.reduce((s, x) => s + x.pct, 0) / gsAll.length) : 0;
+  const dow = new Date().getDay(), lastKey = wkOf(-1);
+  $('ovBanner').innerHTML = !reviews()[wk] && (dow === 0 || dow >= 5) ? `<div class="banner"><span>这周快结束了，花几分钟写个回顾吧</span><a href="#review">写本周回顾 →</a></div>`
+    : dow === 1 && !reviews()[lastKey] && goals().length ? `<div class="banner"><span>上周的回顾还没写</span><a href="#review" data-rw="-1">补写上周回顾 →</a></div>` : '';
+  const stats = [
+    ['c-red', '#todos', '今天到期', loggedIn ? n.due : '–', loggedIn ? `待办共 ${n.open} 件` : '登录黎记后显示', ICON.clock],
+    ['c-yellow', '#goals', '本周小步骤', `${fd}<small style="margin-left:4px">/ ${focus.length}</small>`, focus.length ? (fd === focus.length ? '本周计划全部完成' : `还差 ${focus.length - fd} 步`) : '去目标里挑几步', ICON.step],
+    ['c-blue', '#goals', '目标进度', `${gAvg}<small style="margin-left:2px">%</small>`, goals().length ? `${goals().length} 个目标${behind ? ` · ${behind} 个落后` : ''}` : '还没有设定目标', ICON.target],
+    b.budget ? ['c-green', '#wishes', '心愿预算剩余', `<small>RM</small>${Math.round(b.left).toLocaleString('en-MY')}`, `本月预算 ${money(b.budget)}`, ICON.bag]
+             : ['c-green', '#wishes', '待购金额', `<small>RM</small>${Math.round(n.leftSum).toLocaleString('en-MY')}`, `${n.left} 件想买的`, ICON.bag]];
+  $('stats').innerHTML = stats.map(([c, href, k, v, s, ic]) => `<a class="stat ${c}" href="${href}"><div class="k">${k}${ic}</div><div class="v num">${v}</div><div class="s">${s}</div></a>`).join('');
+
+  const next = tasks.filter(t => !t.completed).sort(byDue).slice(0, 6);
+  $('ovGoals').innerHTML = goals().length ? goals().map((g, i) => {
+    const gs = gsAll[i];
+    return `<div class="mini-goal"><div class="line1"><span>${esc(g.title)}</span>${gs.state[0] ? `<span class="state ${gs.state[1]}">${gs.state[0]}</span>` : ''}</div>
+      ${dual(g, gs)}<div class="meta">${g.deadline ? `<span>${esc(g.deadline.replace('-', ' 年 '))} 月截止${gs.months !== null ? ` · 还剩 ${gs.months} 个月` : ''}</span>` : ''}<span>${gs.done}/${gs.total} 个小步骤</span></div></div>`;
+  }).join('') : '<div class="notice"><span>写下一个两年后想达成的大目标，再拆成小步骤</span><button class="btn" data-new="goal">＋ 新目标</button></div>';
+  $('ovWeekTag').textContent = focus.length ? `${fd}/${focus.length}` : '';
+  $('ovWeek').innerHTML = focus.length ? focus.map(stepRow).join('')
+    : `<div class="notice"><span>${goals().length ? '本周还没挑小步骤。到目标页，点小步骤旁的“本周”就会出现在这里。' : '设定目标后，可以每周挑几步来推进。'}</span></div>`;
+
+  $('ovTodos').innerHTML = !loggedIn ? loginNotice : next.length ? next.map(todoRow).join('') : '<div class="empty">没有待办，轻松一下</div>';
+
+  const order = {dev:0, test:1, idea:2, pause:3, live:4};
+  const act = projects().filter(p => p.status !== 'live').sort((a, b) => (order[a.status] ?? 5) - (order[b.status] ?? 5)).slice(0, 5);
+  $('ovProjects').innerHTML = act.length ? act.map(p => {
+    const s = ST[p.status] || ST.dev, prog = Math.max(0, Math.min(100, +p.progress || 0));
+    return `<div class="mini-proj"><div class="line1"><span class="name">${esc(p.name)}</span><span class="pill" style="--c:${s[2]}">${s[1]} · <span class="num">${prog}%</span></span></div>
+      <div class="bar"><i style="width:${prog}%"></i></div>${p.next ? `<div class="meta">下一步：${esc(p.next)}</div>` : ''}</div>`;
+  }).join('') : '<div class="notice"><span>还没有进行中的项目</span><button class="btn" data-new="proj">＋ 新项目</button></div>';
+
+  $('ovBudget').innerHTML = budgetBlock(b);
+  const top = wishes().filter(w => !w.bought).sort(wishSorter('pri')).slice(0, 3);
+  $('ovWishes').innerHTML = top.map(w => `<div class="row"><span class="dot" style="background:${(PRI[w.priority] || PRI.medium)[1]}"></span>
+    <div class="t">${esc(w.name)}${fits(w, b) ? '<span class="fit">预算内</span>' : ''}</div><span class="num" style="white-space:nowrap">${w.price != null ? money(w.price) : '—'}</span></div>`).join('');
+
+  const items = [['黎记', 'https://lai75.github.io/liji-app/', '黎'], ['黎记仓库', 'https://github.com/Lai75/liji-app', 'G']]
+    .concat(projects().filter(p => safeUrl(p.link)).slice(0, 7).map(p => [p.name, p.link, p.name.trim().charAt(0).toUpperCase()]));
+  $('nav').innerHTML = items.map(([name, url, ch]) => `<a href="${esc(url)}" target="_blank" rel="noopener"><span class="ic">${esc(ch)}</span>${esc(name)}</a>`).join('');
+  $('feed').innerHTML = feed.length ? feed.slice(0, 6).map(f => `<li style="--c:${f.color}">${esc(f.text)}<time>${ago(f.at)}</time></li>`).join('')
+    : '<li>这里会记录你在工作台上的操作<time>添加项目或心愿后显示</time></li>';
+}
+function budgetBlock(b){
+  const n = numbers();
+  if(!b.budget) return `<div class="budget"><div class="big num">${money(n.leftSum)}</div><div class="sub"><span>待购合计 · ${n.left} 件</span><a class="more" href="#prefs">设置每月预算</a></div></div>`;
+  const pct = Math.min(100, Math.round(b.spent / b.budget * 100));
+  return `<div class="budget"><div class="big num" style="color:${b.left < 0 ? 'var(--red)' : 'inherit'}">${b.left < 0 ? '超出 ' + money(-b.left) : '还能花 ' + money(b.left)}</div>
+    <div class="bar ${b.left < 0 ? 'over' : ''}" style="height:6px"><i style="width:${pct}%"></i></div>
+    <div class="sub"><span>本月已买 ${money(b.spent)} / 预算 ${money(b.budget)}</span><span>待购 ${money(n.leftSum)}</span></div></div>`;
+}
+const fits = (w, b) => b.budget && w.price != null && +w.price <= b.left;
+function ago(t){
+  const m = Math.round((Date.now() - t) / 60000);
+  return m < 1 ? '刚刚' : m < 60 ? m + ' 分钟前' : m < 1440 ? Math.round(m / 60) + ' 小时前' : new Date(t).toLocaleDateString('zh-CN', {month:'long', day:'numeric'});
+}
+
+/* ---------- 渲染：待办 ---------- */
+function renderTodos(){
+  $('listChips').innerHTML = `<div class="seg" id="listSeg">${[['all', '全部']].concat(Object.entries(LISTS).map(([k, v]) => [k, v[0]]))
+    .map(([k, v]) => `<button data-l="${k}" class="${ui.list === k ? 'on' : ''}">${v}</button>`).join('')}</div>`;
+  if(!loggedIn){ $('todoList').innerHTML = loginNotice; return; }
+  let list = tasks.slice();
+  if(ui.list !== 'all') list = list.filter(t => (t.listId || 'inbox') === ui.list);
+  if(ui.q) list = list.filter(t => t.title.toLowerCase().includes(ui.q.toLowerCase()));
+  if(ui.todo === 'active') list = list.filter(t => !t.completed);
+  if(ui.todo === 'today') list = list.filter(t => !t.completed && t.dueDate && daysFromToday(t.dueDate) <= 0);
+  if(ui.todo === 'done') list = list.filter(t => t.completed);
+  list.sort(byDue);
+  if(!list.length){ $('todoList').innerHTML = `<div class="empty">${ui.q ? '没有找到相关待办' : ui.todo === 'done' ? '还没有完成的事' : '没有待办，轻松一下'}</div>`; return; }
+  if(ui.todo === 'done'){ $('todoList').innerHTML = list.map(todoRow).join(''); return; }
+  const groups = [['逾期', d => d < 0], ['今天', d => d === 0], ['明天', d => d === 1], ['这周', d => d > 1 && d <= 7], ['以后', d => d > 7], ['没有日期', d => d === null]];
+  $('todoList').innerHTML = groups.map(([name, fn]) => {
+    const g = list.filter(t => fn(daysFromToday(t.dueDate)));
+    return g.length ? `<div class="grp">${name} · ${g.length}</div>` + g.map(todoRow).join('') : '';
+  }).join('');
+}
+
+/* ---------- 渲染：项目 ---------- */
+function renderProjects(){
+  const all = projects(), order = Object.fromEntries(STATUS.map((s, i) => [s[0], i]));
+  const n = numbers();
+  $('projSub').textContent = all.length ? `${all.length} 个项目，${n.active} 个正在推进` : '记录你正在开发的软件';
+  $('projSeg').innerHTML = [['all', '全部', all.length]].concat(STATUS.map(s => [s[0], s[1], all.filter(p => p.status === s[0]).length]))
+    .map(([k, v, c]) => `<button data-s="${k}" class="${ui.proj === k ? 'on' : ''}">${v} ${c}</button>`).join('');
+  const list = all.filter(p => ui.proj === 'all' || p.status === ui.proj).sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
+  $('projList').innerHTML = list.length ? list.map(p => {
+    const s = ST[p.status] || ST.dev, link = safeUrl(p.link), prog = Math.max(0, Math.min(100, +p.progress || 0));
+    return `<article class="proj" data-id="${esc(p.id)}">
+      <div class="top"><div><span class="pill" style="--c:${s[2]}">${s[1]}</span><div class="name">${esc(p.name)}</div></div>
+      <div class="acts"><button data-act="edit" aria-label="编辑">${ICON.edit}</button><button data-act="del" aria-label="删除">${ICON.del}</button></div></div>
+      <div class="bar"><i style="width:${prog}%"></i></div>
+      <div class="prow"><span>${p.start ? esc(p.start) + ' 开始' : '进度'}</span><span class="num" style="color:var(--ink);font-weight:600">${prog}%</span></div>
+      ${p.next ? `<div class="next"><b>下一步 </b>${esc(p.next)}</div>` : ''}
+      ${p.note ? `<div class="note">${esc(p.note)}</div>` : ''}
+      ${link ? `<div class="meta"><a href="${esc(link)}" target="_blank" rel="noopener">打开链接 ↗</a></div>` : ''}</article>`;
+  }).join('') : `<div class="empty" style="grid-column:1/-1">${all.length ? '这个状态下没有项目' : '还没有项目，点“新项目”添加第一个'}</div>`;
+}
+
+/* ---------- 渲染：想买 ---------- */
+const wishSorter = by => by === 'price' ? (a, b) => (+b.price || 0) - (+a.price || 0) : (a, b) => ({high:0, medium:1, low:2}[a.priority] ?? 1) - ({high:0, medium:1, low:2}[b.priority] ?? 1);
+function renderWishes(){
+  const b = budgetInfo();
+  $('wishBudget').innerHTML = budgetBlock(b);
+  const list = wishes().filter(w => ui.wish === 'bought' ? w.bought : !w.bought).sort(wishSorter(ui.sort));
+  $('wishList').innerHTML = list.length ? list.map(w => {
+    const p = PRI[w.priority] || PRI.medium, link = safeUrl(w.link);
+    return `<tr class="${w.bought ? 'done' : ''}" data-id="${esc(w.id)}">
+      <td><button class="chk ${w.bought ? 'on' : ''}" data-act="buy" aria-label="${w.bought ? '标为没买' : '标为已买'}">${w.bought ? ICON.tick : ''}</button></td>
+      <td class="nm"><div class="t">${esc(w.name)}${!w.bought && fits(w, b) ? '<span class="fit">预算内</span>' : ''}</div>
+        <div class="meta">${w.bought && w.boughtAt ? `<span>${esc(w.boughtAt)} 买的</span>` : ''}${link ? `<a href="${esc(link)}" target="_blank" rel="noopener">去购买 ↗</a>` : ''}</div></td>
+      <td class="hide-s"><span class="pill" style="--c:${p[1]}">${p[0]}</span></td>
+      <td class="r num">${w.price != null ? money(w.price) : '—'}</td>
+      <td><div class="acts"><button data-act="edit" aria-label="编辑">${ICON.edit}</button><button data-act="del" aria-label="删除">${ICON.del}</button></div></td></tr>`;
+  }).join('') : `<tr><td colspan="5" class="empty">${ui.wish === 'bought' ? '还没有买过的东西' : '心愿清单是空的'}</td></tr>`;
+  $('w-label').textContent = ui.wish === 'bought' ? '已买合计' : '待购合计';
+  $('w-total').textContent = money(list.reduce((s, w) => s + (+w.price || 0), 0));
+}
+
+/* ---------- 渲染：目标 ---------- */
+function renderGoals(){
+  $('goalList').innerHTML = goals().length ? goals().map(g => {
+    const gs = goalStats(g);
+    return `<section class="box goal" data-g="${esc(g.id)}">
+      <div class="gt"><div><h2>${esc(g.title)}</h2>${g.why ? `<div class="why">${esc(g.why)}</div>` : ''}
+        <div class="meta" style="margin-top:4px">${g.start ? `<span>${esc(g.start)} 开始</span>` : ''}${g.deadline ? `<span>${esc(g.deadline)} 截止</span>` : ''}${gs.months !== null ? `<span>还剩 ${gs.months} 个月</span>` : ''}${gs.state[0] ? `<span class="state ${gs.state[1]}">${gs.state[0]}</span>` : ''}</div></div>
+        <div class="acts"><button data-act="g-edit" aria-label="编辑目标">${ICON.edit}</button><button data-act="g-del" aria-label="删除目标">${ICON.del}</button></div></div>
+      ${dual(g, gs)}
+      ${(g.stages || []).map((s, i) => {
+        const sp = stepsDone(s.steps || []);
+        return `<div class="stage" data-s="${esc(s.id)}"><div class="sh"><span class="ttl"><small>阶段 ${i + 1}</small>${esc(s.title)}</span>
+          ${s.due ? `<span class="due">${esc(s.due)}</span>` : ''}<span class="pc num">${sp.pct}%</span>
+          <div class="acts"><button data-act="s-edit" aria-label="编辑阶段">${ICON.edit}</button><button data-act="s-del" aria-label="删除阶段">${ICON.del}</button></div></div>
+          ${(s.steps || []).map(st => stepRow({g, s, st}, {full: true})).join('')}
+          <div class="addstep"><input data-add="${esc(s.id)}" placeholder="＋ 添加小步骤，回车保存"></div></div>`;
+      }).join('')}
+      <div><button class="btn" data-act="s-add">${ICON.plus} 添加阶段</button></div></section>`;
+  }).join('') : `<section class="box"><div class="empty" style="padding:48px 20px">
+      <p style="margin:0 0 6px;color:var(--ink);font-size:17px">还没有目标</p>
+      <p style="margin:0 0 16px">例如“两年内做出一款有 1000 个用户的 App”。先写下大目标，再拆成几个阶段，每个阶段列出能一步完成的小事。</p>
+      <button class="btn primary" data-new="goal">＋ 新目标</button></div></section>`;
+}
+
+/* ---------- 渲染：回顾 ---------- */
+function renderReview(){
+  const range = weekRange(ui.rw), key = weekKey(range[2]), nk = weekKey(weekStart(ui.rw + 1)), rv = reviews()[key];
+  const wkNum = +key.split('-W')[1];
+  $('rvTitle').innerHTML = `第 ${wkNum} 周 <span class="tag">${md(range[0])} – ${md(range[1])}${ui.rw === 0 ? ' · 本周' : ''}${rv ? ' · 已写' : ''}</span>`;
+  $('rvNext').disabled = ui.rw >= 0;
+  const steps = allSteps().filter(x => x.st.done && inRange(x.st.doneAt, range));
+  const doneTodos = loggedIn ? tasks.filter(t => t.completed && t.u && inRange(localDate(new Date(t.u)), range)) : [];
+  const bought = wishes().filter(w => w.bought && inRange(w.boughtAt, range));
+  const projLog = feed.filter(f => /项目/.test(f.text) && inRange(localDate(new Date(f.at)), range));
+  const ul = (arr, f, none) => arr.length ? `<ul>${arr.slice(0, 8).map(x => `<li>${f(x)}</li>`).join('')}${arr.length > 8 ? `<li>还有 ${arr.length - 8} 项</li>` : ''}</ul>` : `<div class="none">${none}</div>`;
+  $('rvSum').innerHTML = `
+    <div><h3>完成的小步骤 · ${steps.length}</h3>${ul(steps, x => esc(x.st.title), '这周没有完成小步骤')}</div>
+    <div><h3>完成的待办 · ${doneTodos.length}</h3>${loggedIn ? ul(doneTodos, t => esc(t.title), '这周没有完成待办') : '<div class="none">登录黎记后显示</div>'}</div>
+    <div><h3>项目和购物</h3>${ul(projLog.map(f => esc(f.text)).concat(bought.map(w => `买了「${esc(w.name)}」${w.price != null ? ' ' + money(w.price) : ''}`)), x => x, '没有项目更新或购物')}</div>`;
+  if($('rvForm').dataset.key !== key){ // 只在换周或重新进入页面时重填，避免同步刷新时冲掉正在写的内容
+    $('rvForm').dataset.key = key;
+    $('rvGood').value = rv?.good || ''; $('rvProblem').value = rv?.problem || ''; ui.score = rv?.score || 0;
+    const open = allSteps().filter(x => !x.st.done);
+    $('rvNextLabel').textContent = `下周重点（第 ${+nk.split('-W')[1]} 周）：从目标里挑几个小步骤`;
+    $('rvPick').innerHTML = open.length ? open.map(x => `<label><input type="checkbox" value="${esc(x.st.id)}" ${x.st.week === nk ? 'checked' : ''}>${esc(x.st.title)}<small>${esc(x.g.title)}</small></label>`).join('')
+      : `<div class="none" style="padding:8px;color:var(--faint);font-size:14px">${goals().length ? '所有小步骤都完成了' : '先到“目标”页设定目标和小步骤'}</div>`;
+  }
+  $('rvScore').innerHTML = [1, 2, 3, 4, 5].map(n => `<button type="button" data-n="${n}" class="${ui.score === n ? 'on' : ''}">${n}</button>`).join('');
+  const last = Array.from({length: 12}, (_, i) => weekKey(weekStart(i - 11)));
+  $('rvSpark').innerHTML = last.map(k => { const s = reviews()[k]?.score || 0;
+    return `<div title="${k}${s ? ' · ' + s + ' 分' : ' · 未打分'}"><i class="${s ? '' : 'zero'}" style="height:${s * 20}%"></i>${+k.split('-W')[1]}</div>`; }).join('');
+  const hist = Object.entries(reviews()).sort((a, b) => b[0].localeCompare(a[0]));
+  $('rvHist').innerHTML = hist.length ? hist.map(([k, r]) => `<details class="rv"><summary><span>第 ${+k.split('-W')[1]} 周 <span class="meta" style="display:inline">${k.slice(0, 4)} 年</span></span><span class="num">${r.score ? r.score + ' 分' : ''}</span></summary>
+      ${r.good ? `<p><b>做得好的：</b>${esc(r.good)}</p>` : ''}${r.problem ? `<p><b>遇到的问题：</b>${esc(r.problem)}</p>` : ''}${r.next?.length ? `<p><b>下周重点：</b>${r.next.map(esc).join('、')}</p>` : ''}</details>`).join('')
+    : '<div class="empty">写下第一篇回顾后，这里会列出历史记录</div>';
+}
+
+function renderSide(){
+  const n = numbers();
+  $('c-goals').textContent = goals().length || '';
+  $('c-review').textContent = reviews()[wkOf(0)] ? '✓' : '';
+  $('c-todos').textContent = loggedIn ? n.open : '';
+  $('c-projects').textContent = n.allProj || '';
+  $('c-wishes').textContent = n.left || '';
+}
+function renderAll(){ renderSide(); renderOverview(); renderGoals(); renderTodos(); renderProjects(); renderWishes(); renderReview(); }
+
+/* ---------- 路由 ---------- */
+const PAGES = ['overview', 'goals', 'todos', 'projects', 'wishes', 'review', 'prefs'];
+function route(){
+  const p = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
+  PAGES.forEach(x => $('p-' + x).classList.toggle('on', x === p));
+  document.querySelectorAll('#side a').forEach(a => a.classList.toggle('on', a.dataset.p === p));
+  if(p === 'prefs') $('budgetIn').value = settings().budget || '';
+  if(p === 'review'){ delete $('rvForm').dataset.key; renderReview(); }
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', route);
+
+/* ---------- 事件 ---------- */
+function seg(id, attr, fn){ $(id).addEventListener('click', e => { const b = e.target.closest('button'); if(b) fn(b.dataset[attr]); }); }
+seg('todoSeg', 'f', v => { ui.todo = v; $('todoSeg').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.f === v)); renderTodos(); });
+seg('listChips', 'l', v => { ui.list = v; renderTodos(); });
+seg('projSeg', 's', v => { ui.proj = v; renderProjects(); });
+seg('wishSeg', 'f', v => { ui.wish = v; $('wishSeg').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.f === v)); renderWishes(); });
+seg('wishSort', 's', v => { ui.sort = v; $('wishSort').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.s === v)); renderWishes(); });
+$('todoSearch').addEventListener('input', e => { ui.q = e.target.value.trim(); renderTodos(); });
+
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault(); $('loginErr').textContent = '';
+  try{ saveSession(await sbAuth('token?grant_type=password', {email: $('email').value.trim(), password: $('pass').value})); $('pass').value = ''; await sync(); toast('登录成功'); }
+  catch(err){ $('loginErr').textContent = '登录失败：' + err.message; }
+});
+$('logout').onclick = () => { saveSession(null); setLogin(false); toast('已退出登录'); };
+$('refresh').onclick = sync;
+$('budgetForm').addEventListener('submit', e => {
+  e.preventDefault(); settings().budget = Math.max(0, +$('budgetIn').value || 0); persist('station-settings');
+  toast(settings().budget ? '每月预算已设为 ' + money(settings().budget) : '已取消预算');
+});
+$('copyBackup').onclick = async () => {
+  const text = JSON.stringify({projects: projects(), wishes: wishes(), settings: settings(), exportedAt: new Date().toISOString()}, null, 2);
+  try{ await navigator.clipboard.writeText(text); toast('备份已复制'); }catch(e){ toast('复制失败，浏览器不允许访问剪贴板'); }
+};
+$('clearFeed').onclick = () => { const old = feed; feed = []; store.set('station-feed', feed); renderAll(); toast('已清空', () => { feed = old; store.set('station-feed', feed); renderAll(); }); };
+
+const open = id => { $(id).classList.add('on'); setTimeout(() => $(id).querySelector('input').focus(), 30); };
+const close = id => $(id).classList.remove('on');
+document.querySelectorAll('.sheet').forEach(sh => sh.addEventListener('click', e => { if(e.target === sh || e.target.closest('[data-close]')) close(sh.id); }));
+document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.sheet.on').forEach(s => close(s.id)); });
+document.addEventListener('click', e => { const b = e.target.closest('[data-new]'); if(!b) return;
+  ({proj: () => openProj(null), wish: () => openWish(null), goal: () => openGoal(null)})[b.dataset.new](); });
+
+$('p-status').innerHTML = STATUS.map(s => `<option value="${s[0]}">${s[1]}</option>`).join('');
+$('p-prog').oninput = () => $('p-progv').textContent = $('p-prog').value + '%';
+function openProj(p){
+  editingProj = p ? p.id : null; $('projTitle').textContent = p ? '编辑项目' : '新项目';
+  $('p-name').value = p?.name || ''; $('p-status').value = p?.status || 'dev'; $('p-prog').value = p?.progress ?? 0; $('p-prog').oninput();
+  $('p-next').value = p?.next || ''; $('p-link').value = p?.link || ''; $('p-start').value = p?.start || todayStr(); $('p-note').value = p?.note || '';
+  open('projSheet');
+}
+$('projForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const rec = {name: $('p-name').value.trim(), status: $('p-status').value, progress: +$('p-prog').value || 0,
+    next: $('p-next').value.trim(), link: $('p-link').value.trim(), start: $('p-start').value, note: $('p-note').value.trim()};
+  if(!rec.name) return;
+  const ex = editingProj && projects().find(p => p.id === editingProj);
+  if(ex){ log(`更新了项目「${rec.name}」· ${ST[rec.status][1]} ${rec.progress}%`, 'var(--blue)'); Object.assign(ex, rec); }
+  else { projects().unshift({id: uid(), ...rec}); log(`新建了项目「${rec.name}」`, 'var(--yellow)'); }
+  close('projSheet'); persist('station-projects'); toast(ex ? '已保存' : '项目已添加');
+});
+$('projList').onclick = e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const arr = projects(), i = arr.findIndex(p => p.id === b.closest('.proj').dataset.id); if(i < 0) return;
+  if(b.dataset.act === 'edit') openProj(arr[i]);
+  if(b.dataset.act === 'del'){ const [rec] = arr.splice(i, 1); log(`删除了项目「${rec.name}」`, 'var(--faint)'); persist('station-projects');
+    toast('已删除“' + rec.name + '”', () => { projects().splice(i, 0, rec); persist('station-projects'); }); }
+};
+
+function openWish(w){
+  editingWish = w ? w.id : null; $('wishTitle').textContent = w ? '编辑' : '添加想买的';
+  $('w-name').value = w?.name || ''; $('w-price').value = w?.price ?? ''; $('w-pri').value = w?.priority || 'medium'; $('w-link').value = w?.link || '';
+  open('wishSheet');
+}
+$('wishForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const rec = {name: $('w-name').value.trim(), price: $('w-price').value === '' ? null : +$('w-price').value, priority: $('w-pri').value, link: $('w-link').value.trim()};
+  if(!rec.name) return;
+  const ex = editingWish && wishes().find(w => w.id === editingWish);
+  if(ex) Object.assign(ex, rec); else { wishes().unshift({id: uid(), bought: false, ...rec}); log(`想买「${rec.name}」${rec.price != null ? ' · ' + money(rec.price) : ''}`, 'var(--pink)'); }
+  close('wishSheet'); persist('station-wishes'); toast(ex ? '已保存' : '已加入清单');
+});
+$('wishList').onclick = e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const arr = wishes(), i = arr.findIndex(w => w.id === b.closest('tr').dataset.id); if(i < 0) return;
+  const w = arr[i];
+  if(b.dataset.act === 'buy'){
+    const prev = {bought: w.bought, boughtAt: w.boughtAt};
+    w.bought = !w.bought; w.boughtAt = w.bought ? todayStr() : undefined;
+    if(w.bought) log(`买到了「${w.name}」${w.price != null ? ' · ' + money(w.price) : ''}`, 'var(--green)');
+    persist('station-wishes');
+    toast(w.bought ? '买到了，已移到“已买”' : '已移回待购', () => { Object.assign(w, prev); persist('station-wishes'); });
+  }
+  if(b.dataset.act === 'edit') openWish(w);
+  if(b.dataset.act === 'del'){ arr.splice(i, 1); persist('station-wishes');
+    toast('已删除“' + w.name + '”', () => { wishes().splice(i, 0, w); persist('station-wishes'); }); }
+};
+
+/* ---------- 通用表单 ---------- */
+let formSave = null;
+function openForm(title, fields, onSave){
+  $('genTitle').textContent = title;
+  $('genFields').innerHTML = fields.map(f => `<label>${f.label}${f.type === 'textarea'
+    ? `<textarea data-k="${f.k}" placeholder="${esc(f.ph || '')}">${esc(f.value || '')}</textarea>`
+    : `<input data-k="${f.k}" type="${f.type || 'text'}" value="${esc(f.value || '')}" placeholder="${esc(f.ph || '')}" ${f.req ? 'required' : ''}>`}</label>`).join('');
+  formSave = onSave; open('formSheet');
+}
+$('genForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = Object.fromEntries([...$('genFields').querySelectorAll('[data-k]')].map(i => [i.dataset.k, i.value.trim()]));
+  if(formSave && formSave(v) !== false) close('formSheet');
+});
+
+/* ---------- 目标 ---------- */
+const findGoal = id => goals().find(g => g.id === id);
+function openGoal(g){
+  openForm(g ? '编辑目标' : '新目标', [
+    {k: 'title', label: '大目标', value: g?.title, req: true, ph: '例如：两年内做出一款有 1000 个用户的 App'},
+    {k: 'why', label: '为什么想做到（可选）', type: 'textarea', value: g?.why, ph: '写给未来没动力时的自己'},
+    {k: 'start', label: '开始日期', type: 'date', value: g?.start || todayStr()},
+    {k: 'deadline', label: '截止月份', type: 'month', value: g?.deadline || (new Date().getFullYear() + 2) + todayStr().slice(4, 7), ph: 'YYYY-MM'}
+  ], v => {
+    if(v.deadline && !/^\d{4}-\d{2}$/.test(v.deadline)){ toast('截止月份请写成 2028-11 这样的格式'); return false; }
+    if(g) Object.assign(g, v); else { goals().push({id: uid(), ...v, stages: []}); log(`设定了新目标「${v.title}」`, 'var(--acc)'); }
+    persist('station-goals'); toast(g ? '已保存' : '目标已创建，接着添加阶段吧');
+  });
+}
+function openStage(g, s){
+  openForm(s ? '编辑阶段' : '添加阶段', [
+    {k: 'title', label: '阶段名称', value: s?.title, req: true, ph: '例如：学好前端基础'},
+    {k: 'due', label: '计划完成月份（可选）', type: 'month', value: s?.due, ph: 'YYYY-MM'}
+  ], v => {
+    if(s) Object.assign(s, v); else (g.stages = g.stages || []).push({id: uid(), ...v, steps: []});
+    persist('station-goals');
+  });
+}
+$('addGoal').onclick = () => openGoal(null);
+$('goalList').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if(!b || b.dataset.act.startsWith('st-')) return;
+  const g = findGoal(b.closest('.goal').dataset.g); if(!g) return;
+  const sEl = b.closest('.stage'), s = sEl && g.stages.find(x => x.id === sEl.dataset.s);
+  const act = b.dataset.act;
+  if(act === 'g-edit') openGoal(g);
+  if(act === 'g-del'){ const i = goals().indexOf(g); goals().splice(i, 1); persist('station-goals');
+    toast('已删除目标“' + g.title + '”', () => { goals().splice(i, 0, g); persist('station-goals'); }); }
+  if(act === 's-add') openStage(g, null);
+  if(act === 's-edit') openStage(g, s);
+  if(act === 's-del'){ const i = g.stages.indexOf(s); g.stages.splice(i, 1); persist('station-goals');
+    toast('已删除阶段“' + s.title + '”', () => { g.stages.splice(i, 0, s); persist('station-goals'); }); }
+});
+$('goalList').addEventListener('keydown', e => {
+  const inp = e.target.closest('input[data-add]'); if(!inp || e.key !== 'Enter' || e.isComposing) return;
+  e.preventDefault();
+  const title = inp.value.trim(); if(!title) return;
+  const g = findGoal(inp.closest('.goal').dataset.g), s = g?.stages.find(x => x.id === inp.dataset.add); if(!s) return;
+  (s.steps = s.steps || []).push({id: uid(), title, done: false});
+  persist('station-goals');
+  const again = document.querySelector(`input[data-add="${CSS.escape(s.id)}"]`); if(again) again.focus();
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act^="st-"]'); if(!b) return;
+  const row = b.closest('.step'), g = findGoal(row.dataset.g), s = g?.stages.find(x => x.id === row.dataset.s), st = s?.steps.find(x => x.id === row.dataset.st);
+  if(!st) return;
+  const act = b.dataset.act;
+  if(act === 'st-toggle'){
+    st.done = !st.done; st.doneAt = st.done ? todayStr() : undefined;
+    if(st.done) log(`完成了「${st.title}」· ${g.title}`, 'var(--acc)');
+    persist('station-goals'); if(st.done) toast('又近了一步 · ' + goalStats(g).pct + '%');
+  }
+  if(act === 'st-week'){ const wk = wkOf(0); st.week = st.week === wk ? undefined : wk; persist('station-goals'); toast(st.week ? '已加入本周要推进' : '已移出本周'); }
+  if(act === 'st-edit') openForm('编辑小步骤', [{k: 'title', label: '小步骤', value: st.title, req: true}], v => { st.title = v.title; persist('station-goals'); });
+  if(act === 'st-del'){ const i = s.steps.indexOf(st); s.steps.splice(i, 1); persist('station-goals');
+    toast('已删除小步骤', () => { s.steps.splice(i, 0, st); persist('station-goals'); }); }
+});
+
+/* ---------- 回顾 ---------- */
+$('rvPrev').onclick = () => { ui.rw--; renderReview(); };
+$('rvNext').onclick = () => { if(ui.rw < 0){ ui.rw++; renderReview(); } };
+document.addEventListener('click', e => { const a = e.target.closest('a[data-rw]'); if(a) ui.rw = +a.dataset.rw; });
+$('rvScore').addEventListener('click', e => { const b = e.target.closest('button[data-n]'); if(!b) return; ui.score = ui.score === +b.dataset.n ? 0 : +b.dataset.n; renderReview(); });
+$('rvForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const key = $('rvForm').dataset.key, nk = weekKey(weekStart(ui.rw + 1));
+  const picked = new Set([...$('rvPick').querySelectorAll('input:checked')].map(i => i.value));
+  const next = [];
+  allSteps().forEach(({st}) => {
+    if(picked.has(st.id)){ st.week = nk; next.push(st.title); }
+    else if(st.week === nk) st.week = undefined;
+  });
+  const isNew = !reviews()[key];
+  reviews()[key] = {good: $('rvGood').value.trim(), problem: $('rvProblem').value.trim(), score: ui.score, next, at: Date.now()};
+  if(isNew) log(`写了第 ${+key.split('-W')[1]} 周的回顾${ui.score ? ' · ' + ui.score + ' 分' : ''}`, 'var(--blue)');
+  persist('station-goals'); persist('station-reviews');
+  toast(next.length ? `回顾已保存，下周重点 ${next.length} 步` : '回顾已保存');
+});
+
+/* ---------- 启动 ---------- */
+$('acctOut').hidden = !!session; $('acctIn').hidden = !session;
+route();
+renderAll();
+sync();
+setInterval(() => { if(document.visibilityState === 'visible' && loggedIn) sync(); }, 60000);
+window.addEventListener('online', sync);
+}
+</script>
+</body>
+</html>
