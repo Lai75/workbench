@@ -238,6 +238,76 @@ input[type=range]{padding:0;accent-color:var(--acc);border:0;background:none;box
 .meter.over i{background:var(--red)}
 @media(max-width:1100px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.bento{gap:10px;grid-auto-rows:minmax(150px,auto)}.tile{padding:14px}.big{font-size:30px}.clock{font-size:30px}.ringRow{flex-direction:column;align-items:flex-start;gap:6px}.ringRow svg{width:60px;height:60px}.tile .vchart .c:nth-child(odd) .x{visibility:hidden}}
+/* 侧栏分组 */
+.gt2{font-size:12px;color:var(--faint);padding:14px 12px 4px}
+.morebtn{display:none}
+.morepanel{display:none}
+/* 项目中心 */
+.pcard{cursor:pointer;text-decoration:none;color:inherit}
+.pcard:hover{border-color:#cfcfc9}
+.chips{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px;color:var(--muted)}
+.chips b{font-weight:600;color:var(--ink)}
+.back{font-size:14px;color:var(--acc);text-decoration:none}
+.phead{padding:20px;display:grid;gap:10px}
+.phead h1{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.up{color:#006300}.down{color:var(--red)}
+.kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 20px 20px}
+.kcol{background:var(--soft);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.kcol h3{margin:0;font-size:13px;font-weight:500;color:var(--muted);display:flex;justify-content:space-between}
+.kc{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;display:grid;gap:4px}
+.kc .t{line-height:1.45}
+.kc .mv{display:flex;gap:2px;justify-content:flex-end}
+.kc .mv button{width:28px;height:28px;border-radius:6px;color:var(--faint);font-size:14px}
+.kc .mv button:hover{background:var(--soft);color:var(--ink)}
+.kadd{min-height:36px!important;font-size:14px!important;border-style:dashed!important;background:transparent!important}
+.inl{display:flex;gap:8px;padding:0 20px 12px;flex-wrap:wrap}
+.inl input,.inl select{min-height:38px;font-size:15px;flex:1;min-width:120px}
+.inl select{flex:0 0 auto;width:auto}
+.sev{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;white-space:nowrap}
+.sev.high{background:#fbeaea;color:#b52b2b}.sev.mid{background:#fdf3dc;color:#8a5a00}.sev.low{background:var(--soft);color:var(--muted)}
+.ver{padding:10px 20px;border-top:1px solid var(--line)}
+.ver b{font-family:Inter,sans-serif;font-weight:600}
+.ver p{margin:4px 0 0;font-size:14px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.commit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:8px 20px;border-top:1px solid var(--line);font-size:14px;text-decoration:none;color:inherit}
+.commit:hover{background:var(--soft)}
+.commit .m{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.commit small{grid-column:1/-1;font-size:12px;color:var(--faint)}
+.tile .commit{padding-left:0;padding-right:0}
+/* 服务 */
+.days{font-size:12px;border-radius:4px;padding:0 6px;white-space:nowrap;background:var(--soft);color:var(--muted)}
+.days.soon{background:#fdf3dc;color:#8a5a00}.days.late{background:#fbeaea;color:#b52b2b}
+/* 笔记 */
+.note-card{border-top:1px solid var(--line);padding:12px 20px}
+.note-card summary{cursor:pointer;display:flex;justify-content:space-between;gap:12px;align-items:baseline;list-style:none}
+.note-card summary::-webkit-details-marker{display:none}
+.note-card summary b{font-weight:500;overflow-wrap:anywhere}
+.nbody{margin-top:10px;font-size:15px;overflow-wrap:anywhere}
+.nbody p{margin:0 0 8px}
+.nbody code{font-family:var(--mono,ui-monospace),monospace;background:var(--soft);border-radius:4px;padding:1px 5px;font-size:13px}
+.code{position:relative;margin:0 0 10px}
+.code pre{background:#1d1d1f;color:#f2f2ef;border-radius:8px;padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0;font-family:ui-monospace,Consolas,monospace}
+.code .cp{position:absolute;top:6px;right:6px;font-size:12px;color:#d1d1d6;border:1px solid #444;border-radius:6px;padding:2px 8px;background:#2a2a2c}
+.tagc{font-size:12px;background:var(--soft);color:var(--muted);border-radius:4px;padding:0 6px;margin-right:4px}
+textarea.tall{min-height:220px;font-family:ui-monospace,Consolas,monospace;font-size:14px}
+/* 灵感 */
+.quick{display:flex;gap:8px;padding:16px 20px}
+.quick input{flex:1}
+.idea{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 20px;border-top:1px solid var(--line);align-items:start}
+.idea .t{font-weight:500}
+.idea.done .t,.idea.drop .t{color:var(--faint)}
+.istat{font-size:12px;border-radius:4px;padding:1px 8px;white-space:nowrap;cursor:pointer;border:0}
+.istat.new{background:#e8f0fb;color:#1c5cab}.istat.think{background:#fdf3dc;color:#8a5a00}.istat.done{background:#e9f2ef;color:var(--acc)}.istat.drop{background:var(--soft);color:var(--faint)}
+.iacts{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.iacts .btn{min-height:30px;font-size:13px;padding:0 10px}
+/* 我的 App */
+.apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;flex:1;align-content:start}
+.app2{display:flex;gap:10px;align-items:center;padding:8px;border-radius:10px;text-decoration:none;color:inherit;border:1px solid var(--line)}
+.app2:hover{background:var(--soft)}
+.app2 .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:600;color:#fff;flex:none;font-size:16px}
+.app2 b{display:block;font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app2 small{display:block;font-size:12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:900px){.kanban{grid-template-columns:minmax(0,1fr)}}
 #tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;line-height:1.45;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity .1s}
 #tip.on{opacity:1}
 
@@ -300,8 +370,14 @@ details.rv b{font-weight:500;color:var(--muted)}
 @media(max-width:760px){
   .app{grid-template-columns:minmax(0,1fr)}
   .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:30;flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
-  .brand,.side .foot2,.side .cnt{display:none}
-  .side a{flex:1;flex-direction:column;gap:2px;justify-content:center;padding:0;min-height:54px;font-size:11px;min-width:0}
+  .brand,.side .foot2,.side .cnt,.gt2,.side a.mx{display:none}
+  .side a,.morebtn{flex:1;flex-direction:column;gap:2px;justify-content:center;padding:0;min-height:54px;font-size:11px;min-width:0}
+  .morebtn{display:flex;align-items:center;color:var(--muted)}.morebtn svg{width:18px;height:18px}
+  .morebtn.on{color:var(--acc)}
+  .morepanel:not([hidden]){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;position:fixed;left:8px;right:8px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:31;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+  .morepanel a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:10px;text-decoration:none;color:var(--ink);font-size:13px}
+  .morepanel a svg{width:20px;height:20px}
+  .morepanel a.on{background:var(--soft);color:var(--acc)}
   .sum3{grid-template-columns:minmax(0,1fr)}
   .side a.on{background:none;color:var(--acc)}
   main{padding-bottom:100px}
@@ -315,14 +391,22 @@ details.rv b{font-weight:500;color:var(--muted)}
   <nav class="side" id="side">
     <div class="brand">我的工作台</div>
     <a href="#overview" data-p="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/></svg>总览</a>
-    <a href="#goals" data-p="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>目标<span class="cnt" id="c-goals"></span></a>
-    <a href="#todos" data-p="todos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>待办<span class="cnt" id="c-todos"></span></a>
+    <div class="gt2">开发</div>
     <a href="#projects" data-p="projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>项目<span class="cnt" id="c-projects"></span></a>
-    <a href="#wishes" data-p="wishes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 016 0"/></svg>想买<span class="cnt" id="c-wishes"></span></a>
-    <a href="#review" data-p="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h5"/></svg>回顾<span class="cnt" id="c-review"></span></a>
-    <a href="#prefs" data-p="prefs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>设置</a>
+    <a href="#services" data-p="services" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>服务<span class="cnt" id="c-services"></span></a>
+    <a href="#notes" data-p="notes" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h4"/></svg>笔记<span class="cnt" id="c-notes"></span></a>
+    <a href="#ideas" data-p="ideas" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>灵感<span class="cnt" id="c-ideas"></span></a>
+    <div class="gt2">规划</div>
+    <a href="#goals" data-p="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>目标<span class="cnt" id="c-goals"></span></a>
+    <a href="#review" data-p="review" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h5"/></svg>回顾<span class="cnt" id="c-review"></span></a>
+    <div class="gt2">生活</div>
+    <a href="#todos" data-p="todos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>待办<span class="cnt" id="c-todos"></span></a>
+    <a href="#wishes" data-p="wishes" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 016 0"/></svg>想买<span class="cnt" id="c-wishes"></span></a>
+    <a href="#prefs" data-p="prefs" class="mx" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>设置</a>
+    <button type="button" class="morebtn" id="moreBtn" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>更多</button>
     <div class="foot2" id="sideSync"></div>
   </nav>
+  <div class="morepanel" id="morePanel" hidden></div>
 
   <main>
     <!-- 总览 -->
@@ -386,8 +470,24 @@ details.rv b{font-weight:500;color:var(--muted)}
         </section>
 
         <section class="tile w2">
-          <div class="tl"><span>最近动态</span></div>
-          <ul class="feed" id="feed"></ul>
+          <div class="tl"><span>我的 App</span><a href="#projects">管理 →</a></div>
+          <div class="apps" id="tApps"></div>
+        </section>
+
+        <section class="tile w2">
+          <div class="tl"><span>最近提交 · GitHub</span><a href="#projects">全部项目 →</a></div>
+          <div class="list" id="tCommits"></div>
+        </section>
+
+        <section class="tile">
+          <div class="tl"><span>服务费用</span><a href="#services">全部 →</a></div>
+          <div id="tSvc"></div>
+        </section>
+
+        <section class="tile">
+          <div class="tl"><span>灵感箱</span><a href="#ideas">全部 →</a></div>
+          <form id="ovIdeaForm" style="display:flex;gap:6px"><input id="ovIdeaIn" placeholder="记下一个想法…" autocomplete="off" style="min-height:36px;font-size:15px"></form>
+          <div class="list" id="tIdeas"></div>
         </section>
 
         <section class="tile">
@@ -396,8 +496,8 @@ details.rv b{font-weight:500;color:var(--muted)}
         </section>
 
         <section class="tile">
-          <div class="tl"><span>快捷入口</span></div>
-          <div class="nav" id="nav"></div>
+          <div class="tl"><span>最近动态</span></div>
+          <ul class="feed" id="feed"></ul>
         </section>
       </div>
     </section>
@@ -420,8 +520,43 @@ details.rv b{font-weight:500;color:var(--muted)}
     <section class="page" id="p-projects">
       <div class="ph"><div><h1>项目</h1><p id="projSub"></p></div><button class="btn primary" data-new="proj">＋ 新项目</button></div>
       <section class="box panel">
-        <div class="hd"><div class="seg" id="projSeg"></div></div>
+        <div class="hd"><div class="seg" id="projSeg"></div><button class="btn" id="ghRefresh">刷新 GitHub</button></div>
         <div class="grid" id="projList"></div>
+      </section>
+    </section>
+
+    <!-- 项目详情 -->
+    <section class="page" id="p-proj"><div id="projDetail" style="display:grid;gap:20px"></div></section>
+
+    <!-- 服务 -->
+    <section class="page" id="p-services">
+      <div class="ph"><div><h1>服务与费用</h1><p>记录用到的服务、续费日期和花费。这里不保存密码和密钥。</p></div><button class="btn primary" data-new="svc">＋ 添加服务</button></div>
+      <div class="stats" id="svcStats"></div>
+      <section class="box panel">
+        <div class="hd"><div class="seg" id="svcSeg"></div></div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th>服务</th><th class="hide-s">类别</th><th class="r">费用</th><th>续费</th><th class="hide-s">项目</th><th style="width:110px"></th></tr></thead>
+          <tbody id="svcList"></tbody>
+        </table></div>
+      </section>
+    </section>
+
+    <!-- 笔记 -->
+    <section class="page" id="p-notes">
+      <div class="ph"><div><h1>笔记</h1><p>学到的东西、代码片段、常用命令。用 ``` 包住的内容会显示成代码块，并带复制按钮。</p></div><button class="btn primary" data-new="note">＋ 新笔记</button></div>
+      <section class="box panel">
+        <div class="hd"><input class="search" id="noteSearch" type="search" placeholder="搜索笔记"><div class="seg" id="noteTags"></div></div>
+        <div id="noteList"></div>
+      </section>
+    </section>
+
+    <!-- 灵感 -->
+    <section class="page" id="p-ideas">
+      <div class="ph"><div><h1>灵感箱</h1><p>想到就先记下来，觉得可行再转成项目</p></div></div>
+      <section class="box panel">
+        <form class="quick" id="ideaForm"><input id="ideaIn" placeholder="记下一个想法，回车保存" autocomplete="off"><button class="btn primary" type="submit">记下</button></form>
+        <div class="tools"><div class="seg" id="ideaSeg"></div></div>
+        <div id="ideaList"></div>
       </section>
     </section>
 
@@ -515,9 +650,11 @@ details.rv b{font-weight:500;color:var(--muted)}
   <h3 id="projTitle">新项目</h3>
   <label>项目名<input id="p-name" required></label>
   <div class="two"><label>状态<select id="p-status"></select></label><label>开始日期<input id="p-start" type="date"></label></div>
-  <label>进度 <span class="num" id="p-progv">0%</span><input id="p-prog" type="range" min="0" max="100" step="5" value="0"></label>
+  <label>GitHub 仓库<input id="p-repo" placeholder="Lai75/liji-app 或仓库网址"></label>
+  <label>线上网址（填了会出现在“我的 App”）<input id="p-site" type="url" placeholder="https://lai75.github.io/liji-app/"></label>
+  <label>进度 <span class="num" id="p-progv">0%</span>（添加任务后会自动计算）<input id="p-prog" type="range" min="0" max="100" step="5" value="0"></label>
   <label>下一步要做<input id="p-next"></label>
-  <label>链接<input id="p-link" type="url" placeholder="https://"></label>
+  <label>其他链接<input id="p-link" type="url" placeholder="https://"></label>
   <label>备注<textarea id="p-note"></textarea></label>
   <div class="btns"><button type="button" class="btn" data-close>取消</button><button class="btn primary" type="submit">保存</button></div>
 </form></div>
@@ -611,13 +748,17 @@ const PRI = {high:['高','#d64545'], medium:['中','#c98a12'], low:['低','#8e9a
 // 项目状态用分类色板的前五个槽位，按固定顺序分配（图表和标签同色）
 const STATUS = [['dev','开发中','#2a78d6'], ['test','测试中','#eb6834'], ['idea','构思中','#1baf7a'], ['pause','暂停','#eda100'], ['live','已上线','#e87ba4']];
 const ST = Object.fromEntries(STATUS.map(s => [s[0], s]));
-const KEYS = ['station-projects', 'station-wishes', 'station-settings', 'station-goals', 'station-reviews'];
+const KEYS = ['station-projects', 'station-wishes', 'station-settings', 'station-goals', 'station-reviews', 'station-services', 'station-notes', 'station-ideas'];
 let data = {'station-projects': store.get('station-projects', []), 'station-wishes': store.get('station-wishes', []), 'station-settings': store.get('station-settings', {budget: 0}),
   'station-goals': store.get('station-goals', []), 'station-reviews': store.get('station-reviews', {})};
 const projects = () => data['station-projects'], wishes = () => data['station-wishes'], settings = () => data['station-settings'];
 const goals = () => data['station-goals'], reviews = () => data['station-reviews'];
+['station-services', 'station-notes', 'station-ideas'].forEach(k => data[k] = store.get(k, []));
+const services = () => data['station-services'], notes = () => data['station-notes'], ideas = () => data['station-ideas'];
+// 项目进度：有任务时按完成比例自动算，否则用手动填的进度
+const projProg = p => { const t = p.tasks || []; return t.length ? Math.round(t.filter(x => x.status === 'done').length / t.length * 100) : Math.max(0, Math.min(100, +p.progress || 0)); };
 let tasks = [], loggedIn = false;
-let ui = {todo: 'active', list: 'all', q: '', proj: 'all', wish: 'todo', sort: 'pri', rw: 0, score: 0};
+let ui = {todo: 'active', list: 'all', q: '', proj: 'all', wish: 'todo', sort: 'pri', rw: 0, score: 0, svc: 'all', ntag: 'all', nq: '', nopen: null, idea: 'all', pid: null};
 let editingProj = null, editingWish = null;
 let feed = store.get('station-feed', []);
 let meta = store.get('station-sync-meta', {});
@@ -680,7 +821,7 @@ function numbers(){
   return {open: open.length, due: open.filter(t => t.dueDate && daysFromToday(t.dueDate) <= 0).length,
     week: open.filter(t => t.dueDate && daysFromToday(t.dueDate) <= 7).length,
     active: projects().filter(p => p.status === 'dev' || p.status === 'test').length, allProj: projects().length,
-    avg: projects().length ? Math.round(projects().reduce((s, p) => s + (+p.progress || 0), 0) / projects().length) : 0,
+    avg: projects().length ? Math.round(projects().reduce((s, p) => s + projProg(p), 0) / projects().length) : 0,
     left: left.length, leftSum: left.reduce((s, w) => s + (+w.price || 0), 0)};
 }
 
@@ -854,9 +995,25 @@ function renderOverview(){
   $('tAch').innerHTML = [['完成的小步骤', allDone], ['写过的回顾', rvN], ['上线的项目', live], ['买到的心愿', bought]]
     .map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('');
 
-  const items = [['黎记', 'https://lai75.github.io/liji-app/', '黎'], ['黎记仓库', 'https://github.com/Lai75/liji-app', 'G']]
-    .concat(projects().filter(p => safeUrl(p.link)).slice(0, 2).map(p => [p.name, p.link, p.name.trim().charAt(0).toUpperCase()]));
-  $('nav').innerHTML = items.map(([name, url, ch]) => `<a href="${esc(url)}" target="_blank" rel="noopener"><span class="ic">${esc(ch)}</span>${esc(name)}</a>`).join('');
+  // 我的 App：填了线上网址的项目
+  const apps = projects().filter(p => safeUrl(p.site));
+  $('tApps').innerHTML = apps.length ? apps.map((p, i) => { const gh = p.repo && GH[p.repo];
+    return `<a class="app2" href="${esc(p.site)}" target="_blank" rel="noopener" data-tip="${esc(p.name)}<br>${esc(p.site)}"><span class="ic" style="background:${appColor(p.id)}">${esc(p.name.trim().charAt(0).toUpperCase())}</span>
+      <span style="min-width:0"><b>${esc(p.name)}</b><small>${siteLabel(p.site) || '打开 ↗'}${gh?.info ? ' · ' + agoIso(gh.info.pushed) + '更新' : ''}</small></span></a>`; }).join('')
+    : '<div class="notice"><span>给项目填上“线上网址”，它就会出现在这里，一点就打开</span><a class="btn" href="#projects">去填写</a></div>';
+  // 最近提交
+  const cm = allCommits().slice(0, 5);
+  $('tCommits').innerHTML = cm.length ? cm.map(c => `<a class="commit" href="${esc(c.url)}" target="_blank" rel="noopener"><span class="m">${esc(c.msg)}</span><span class="sub">${agoIso(c.at)}</span><small>${esc(c.proj.name)} · ${esc(c.sha)}</small></a>`).join('')
+    : `<div class="notice"><span>${projects().some(p => p.repo) ? '正在读取 GitHub…' : '给项目填上 GitHub 仓库，这里会显示所有仓库的最新提交'}</span></div>`;
+  // 服务费用
+  const st = svcTotals();
+  $('tSvc').innerHTML = `<div class="big num"><small style="margin:0 4px 0 0">RM</small>${Math.round(st.m).toLocaleString('en-MY')}<small>/月</small></div>
+    <div class="sub">${st.n ? `${st.n} 个服务 · 每年约 ${money(st.y)}` : '还没有记录服务'}</div>
+    ${st.soon.slice(0, 2).map(x => `<div class="sub" style="display:flex;justify-content:space-between;gap:6px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.name)}</span>${daysChip(x.renew)}</div>`).join('')}`;
+  // 灵感
+  const live2 = ideas().filter(i => i.status === 'new' || i.status === 'think');
+  $('tIdeas').innerHTML = live2.slice(0, 3).map(i => `<div class="sub" style="padding:4px 0;border-top:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.text)}</div>`).join('')
+    + (live2.length > 3 ? `<a class="more" href="#ideas" style="font-size:13px">还有 ${live2.length - 3} 个 →</a>` : '');
   $('feed').innerHTML = feed.length ? feed.slice(0, 4).map(f => `<li style="--c:${f.color}">${esc(f.text)}<time>${ago(f.at)}</time></li>`).join('')
     : '<li>这里会记录你在工作台上的操作<time>添加项目或心愿后显示</time></li>';
 }
@@ -886,7 +1043,9 @@ scoreRO.observe($('cScore'));
 document.addEventListener('mouseover', e => {
   const el = e.target.closest?.('[data-tip]'), tip = $('tip');
   if(!el){ tip.classList.remove('on'); return; }
-  tip.innerHTML = el.getAttribute('data-tip'); tip.classList.add('on');
+  // 属性值已被浏览器解码，只能当纯文本放进提示框，<br> 作为换行
+  const parts = el.getAttribute('data-tip').split('<br>');
+  tip.replaceChildren(...parts.flatMap((t, i) => i ? [document.createElement('br'), t] : [t])); tip.classList.add('on');
 });
 document.addEventListener('mousemove', e => {
   const tip = $('tip'); if(!tip.classList.contains('on')) return;
@@ -930,26 +1089,259 @@ function renderTodos(){
 }
 
 /* ---------- 渲染：项目 ---------- */
+/* ---------- GitHub 与网站状态 ---------- */
+function normRepo(s){
+  s = (s || '').trim().replace(/\.git$/, '').replace(/\/+$/, '');
+  const m = s.match(/github\.com\/([\w.-]+\/[\w.-]+)/i) || s.match(/^([\w.-]+\/[\w.-]+)$/);
+  return m ? m[1] : '';
+}
+let GH = store.get('station-gh', {});
+async function ghJSON(url){
+  const r = await fetch(url, {headers: {Accept: 'application/vnd.github+json'}});
+  if(!r.ok) throw new Error(r.status === 404 ? '找不到仓库（私有仓库无法读取）' : r.status === 403 ? 'GitHub 请求次数暂时用完，稍后再试' : 'HTTP ' + r.status);
+  return r.json();
+}
+async function ghLoad(repo, force){
+  if(!repo) return null;
+  const c = GH[repo];
+  if(!force && c && Date.now() - c.at < 10 * 60e3) return c;
+  try{
+    const [info, commits] = await Promise.all([ghJSON(`https://api.github.com/repos/${repo}`), ghJSON(`https://api.github.com/repos/${repo}/commits?per_page=8`)]);
+    GH[repo] = {at: Date.now(), info: {pushed: info.pushed_at, issues: info.open_issues_count, url: info.html_url, desc: info.description || '', branch: info.default_branch},
+      commits: commits.map(x => ({sha: x.sha.slice(0, 7), msg: (x.commit.message || '').split('\n')[0], at: x.commit.author?.date || x.commit.committer?.date, author: x.commit.author?.name || '', url: x.html_url}))};
+  }catch(e){ GH[repo] = {...(c || {}), at: Date.now(), err: e.message}; }
+  store.set('station-gh', GH);
+  return GH[repo];
+}
+let ghBusy = false, ghPending = false;
+async function ghRefreshAll(force){
+  if(ghBusy){ if(force) ghPending = true; return; } ghBusy = true;
+  const repos = [...new Set(projects().map(p => normRepo(p.repo)).filter(Boolean))];
+  for(const r of repos) await ghLoad(r, force);
+  ghBusy = false; renderAll();
+  if(ghPending){ ghPending = false; ghRefreshAll(true); }
+}
+const siteState = {};
+async function checkSite(url){
+  if(!safeUrl(url) || siteState[url] === 'checking') return;
+  siteState[url] = 'checking';
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 8000);
+  try{ await fetch(url, {mode: 'no-cors', cache: 'no-store', signal: ctl.signal}); siteState[url] = 'up'; }
+  catch(e){ siteState[url] = 'down'; }
+  clearTimeout(timer); renderAll();
+}
+function checkAllSites(){ projects().forEach(p => p.site && checkSite(p.site)); }
+const siteLabel = url => ({up: '<span class="up" title="网址能连上（不代表页面没有出错）">● 能连上</span>', down: '<span class="down">● 连不上</span>', checking: '<span style="color:var(--faint)">● 检查中</span>'})[siteState[url]] || '';
+function allCommits(){
+  return projects().filter(p => p.repo && GH[p.repo]?.commits).flatMap(p => GH[p.repo].commits.map(c => ({...c, proj: p})))
+    .sort((a, b) => (b.at || '').localeCompare(a.at || ''));
+}
+const agoIso = iso => iso ? ago(Date.parse(iso)) : '';
+const APP_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#e87ba4', '#6250d6', '#eda100'];
+// 颜色跟着项目走（按 id 计算），列表增减时不会变
+const appColor = id => APP_COLORS[[...String(id)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % APP_COLORS.length];
+
+/* ---------- 渲染：项目列表 ---------- */
+function projSummary(p){
+  const t = p.tasks || [], b = (p.bugs || []).filter(x => !x.fixed).length, v = (p.versions || [])[0], gh = p.repo && GH[p.repo];
+  return `<div class="chips">${t.length ? `<span>任务 <b>${t.filter(x => x.status === 'done').length}/${t.length}</b></span>` : ''}
+    ${b ? `<span>未修 bug <b style="color:var(--red)">${b}</b></span>` : ''}${v ? `<span>版本 <b>${esc(v.ver)}</b></span>` : ''}
+    ${gh?.info ? `<span>最后提交 ${agoIso(gh.info.pushed)}</span>` : ''}${p.site ? `<span>${siteLabel(p.site)}</span>` : ''}</div>`;
+}
 function renderProjects(){
   const all = projects(), order = Object.fromEntries(STATUS.map((s, i) => [s[0], i]));
   const n = numbers();
-  $('projSub').textContent = all.length ? `${all.length} 个项目，${n.active} 个正在推进` : '记录你正在开发的软件';
+  $('projSub').textContent = all.length ? `${all.length} 个项目，${n.active} 个正在推进。点卡片进入项目，管理任务、bug 和版本` : '记录你正在开发的软件';
   $('projSeg').innerHTML = [['all', '全部', all.length]].concat(STATUS.map(s => [s[0], s[1], all.filter(p => p.status === s[0]).length]))
     .map(([k, v, c]) => `<button data-s="${k}" class="${ui.proj === k ? 'on' : ''}">${v} ${c}</button>`).join('');
   const list = all.filter(p => ui.proj === 'all' || p.status === ui.proj).sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
   $('projList').innerHTML = list.length ? list.map(p => {
-    const s = ST[p.status] || ST.dev, link = safeUrl(p.link), prog = Math.max(0, Math.min(100, +p.progress || 0));
-    return `<article class="proj" data-id="${esc(p.id)}">
-      <div class="top"><div><span class="pill" style="--c:${s[2]}">${s[1]}</span><div class="name">${esc(p.name)}</div></div>
-      <div class="acts"><button data-act="edit" aria-label="编辑">${ICON.edit}</button><button data-act="del" aria-label="删除">${ICON.del}</button></div></div>
+    const s = ST[p.status] || ST.dev, prog = projProg(p);
+    return `<a class="proj pcard" href="#proj-${esc(p.id)}">
+      <div class="top"><div><span class="pill" style="--c:${s[2]}">${s[1]}</span><div class="name">${esc(p.name)}</div></div><span class="num" style="font-weight:600">${prog}%</span></div>
       <div class="bar"><i style="width:${prog}%"></i></div>
-      <div class="prow"><span>${p.start ? esc(p.start) + ' 开始' : '进度'}</span><span class="num" style="color:var(--ink);font-weight:600">${prog}%</span></div>
       ${p.next ? `<div class="next"><b>下一步 </b>${esc(p.next)}</div>` : ''}
-      ${p.note ? `<div class="note">${esc(p.note)}</div>` : ''}
-      ${link ? `<div class="meta"><a href="${esc(link)}" target="_blank" rel="noopener">打开链接 ↗</a></div>` : ''}</article>`;
+      ${projSummary(p)}</a>`;
   }).join('') : `<div class="empty" style="grid-column:1/-1">${all.length ? '这个状态下没有项目' : '还没有项目，点“新项目”添加第一个'}</div>`;
 }
 
+/* ---------- 渲染：项目详情 ---------- */
+const findProj = id => projects().find(p => p.id === id);
+function renderProjDetail(){
+  const p = findProj(ui.pid), box = $('projDetail');
+  if(!p){ box.innerHTML = '<a class="back" href="#projects">← 全部项目</a><div class="box empty">这个项目不存在或已删除</div>'; return; }
+  p.tasks = p.tasks || []; p.bugs = p.bugs || []; p.versions = p.versions || [];
+  const s = ST[p.status] || ST.dev, prog = projProg(p), t = p.tasks, gh = p.repo && GH[p.repo];
+  const col = (k, name) => { const list = t.filter(x => x.status === k);
+    return `<div class="kcol" data-col="${k}"><h3><span>${name}</span><span>${list.length}</span></h3>
+      ${list.map(x => `<div class="kc" data-tid="${esc(x.id)}"><span class="t">${esc(x.title)}</span><div class="mv">
+        ${k !== 'todo' ? `<button data-act="t-left" aria-label="移到左边一栏">←</button>` : ''}${k !== 'done' ? `<button data-act="t-right" aria-label="移到右边一栏">→</button>` : ''}
+        <button data-act="t-del" aria-label="删除任务">✕</button></div></div>`).join('')}
+      ${k === 'todo' ? '<input class="kadd" data-addtask placeholder="＋ 添加任务，回车保存">' : ''}</div>`; };
+  const openBugs = p.bugs.filter(b => !b.fixed), fixedBugs = p.bugs.filter(b => b.fixed);
+  const sevOrder = {high: 0, mid: 1, low: 2}, SEV = {high: '严重', mid: '一般', low: '轻微'};
+  const bugRow = b => `<div class="row ${b.fixed ? 'done' : ''}" data-bid="${esc(b.id)}" style="grid-template-columns:auto minmax(0,1fr) auto">
+    <button class="chk ${b.fixed ? 'on' : ''}" data-act="b-fix" aria-label="${b.fixed ? '标为未修' : '标为已修'}">${b.fixed ? ICON.tick : ''}</button>
+    <div><div class="t">${esc(b.title)}</div><div class="meta"><span class="sev ${b.sev}">${SEV[b.sev] || '一般'}</span><span>${b.fixed ? (b.fixedAt || '') + ' 修好' : (b.at || '') + ' 发现'}</span></div></div>
+    <div class="acts" style="opacity:1"><button data-act="b-del" aria-label="删除">${ICON.del}</button></div></div>`;
+  const svc = services().filter(x => x.project === p.id), nts = notes().filter(x => x.project === p.id);
+  box.innerHTML = `<a class="back" href="#projects">← 全部项目</a>
+    <section class="box phead">
+      <div class="ph"><h1>${esc(p.name)} <span class="pill" style="--c:${s[2]};font-size:14px">${s[1]}</span></h1>
+        <div style="display:flex;gap:8px"><button class="btn" data-act="p-edit">编辑</button><button class="btn" data-act="p-del">删除</button></div></div>
+      <div class="links">${p.repo ? `<a class="btn" href="https://github.com/${esc(p.repo)}" target="_blank" rel="noopener">GitHub ↗</a>` : ''}
+        ${safeUrl(p.site) ? `<a class="btn" href="${esc(p.site)}" target="_blank" rel="noopener">打开网站 ↗</a><span class="sub" style="align-self:center">${siteLabel(p.site)}</span>` : ''}
+        ${safeUrl(p.link) ? `<a class="btn" href="${esc(p.link)}" target="_blank" rel="noopener">其他链接 ↗</a>` : ''}</div>
+      <div><div class="prow"><span>${t.length ? `任务完成 ${t.filter(x => x.status === 'done').length}/${t.length}` : '还没有任务，进度按手动填写'}${p.start ? ' · ' + esc(p.start) + ' 开始' : ''}</span><span class="num" style="color:var(--ink);font-weight:600">${prog}%</span></div>
+        <div class="bar" style="height:6px"><i style="width:${prog}%"></i></div></div>
+      ${p.next ? `<div class="next"><b>下一步 </b>${esc(p.next)}</div>` : ''}${p.note ? `<div class="note">${esc(p.note)}</div>` : ''}
+    </section>
+    <div class="dash">
+      <section class="box panel s8"><div class="hd"><h2>任务看板</h2><span class="sub">用 ← → 移动任务</span></div><div class="kanban">${col('todo', '待做')}${col('doing', '进行中')}${col('done', '完成')}</div></section>
+      <section class="box panel s4"><div class="hd"><h2>GitHub</h2>${p.repo ? '<button class="btn" data-act="gh-refresh">刷新</button>' : ''}</div>
+        ${!p.repo ? '<div class="notice"><span>填写 GitHub 仓库后，这里会自动显示最近的提交</span><button class="btn" data-act="p-edit">填写仓库</button></div>'
+          : !gh ? '<div class="empty">读取中…</div>'
+          : `${gh.err ? `<div class="notice" style="color:var(--red)">${esc(gh.err)}</div>` : ''}
+            ${gh.info ? `<div class="chips" style="padding:0 20px 10px"><span>最后提交 <b>${agoIso(gh.info.pushed)}</b></span><span>未关闭 issue <b>${gh.info.issues}</b></span><span>分支 ${esc(gh.info.branch)}</span></div>` : ''}
+            ${(gh.commits || []).map(c => `<a class="commit" href="${esc(c.url)}" target="_blank" rel="noopener"><span class="m">${esc(c.msg)}</span><span class="sub">${agoIso(c.at)}</span><small>${esc(c.sha)} · ${esc(c.author)}</small></a>`).join('')}`}
+      </section>
+      <section class="box panel s4"><div class="hd"><h2>Bug <span class="tag">${openBugs.length} 个未修</span></h2></div>
+        <form class="inl" data-form="bug"><input name="title" placeholder="描述一个问题，回车保存" required><select name="sev"><option value="high">严重</option><option value="mid" selected>一般</option><option value="low">轻微</option></select></form>
+        ${openBugs.sort((a, b) => (sevOrder[a.sev] ?? 1) - (sevOrder[b.sev] ?? 1)).map(bugRow).join('') || '<div class="empty" style="padding:14px">没有未修的 bug</div>'}
+        ${fixedBugs.length ? `<details style="border-top:1px solid var(--line)"><summary class="grp" style="cursor:pointer;border:0">已修好 ${fixedBugs.length} 个</summary>${fixedBugs.map(bugRow).join('')}</details>` : ''}
+      </section>
+      <section class="box panel s4"><div class="hd"><h2>版本记录</h2></div>
+        <form class="inl" data-form="ver" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)"><input name="ver" placeholder="版本号，如 1.2.0" required><input name="date" type="date" value="${todayStr()}">
+          <textarea name="notes" placeholder="这个版本改了什么" style="grid-column:1/-1;min-height:60px"></textarea><div style="grid-column:1/-1"><button class="btn primary" type="submit">记录版本</button></div></form>
+        ${p.versions.map(v => `<div class="ver" data-vid="${esc(v.id)}"><div style="display:flex;justify-content:space-between;gap:8px"><span><b>${esc(v.ver)}</b> <span class="sub" style="display:inline">${esc(v.date || '')}</span></span><button class="sub" data-act="v-del" style="color:var(--faint)">删除</button></div>${v.notes ? `<p>${esc(v.notes)}</p>` : ''}</div>`).join('') || '<div class="empty" style="padding:14px">还没有发布记录</div>'}
+      </section>
+      <section class="box panel s4"><div class="hd"><h2>用到的服务</h2><button class="btn" data-act="svc-add">＋ 添加</button></div>
+        ${svc.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto"><div><div class="t">${esc(x.name)}</div><div class="meta"><span>${esc(x.cat || '')}</span>${x.renew ? `<span>${esc(x.renew)} 续费</span>` : ''}</div></div><span class="num">${svcCost(x)}</span></div>`).join('') || '<div class="empty" style="padding:14px">还没有关联服务</div>'}
+      </section>
+      <section class="box panel s4"><div class="hd"><h2>相关笔记</h2><button class="btn" data-act="note-add">＋ 新笔记</button></div>
+        ${nts.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto;cursor:pointer" data-act="note-open" data-nid="${esc(x.id)}"><div class="t">${esc(x.title)}</div><span class="sub">${ago(x.upd || x.at)}</span></div>`).join('') || '<div class="empty" style="padding:14px">还没有相关笔记</div>'}
+      </section>
+    </div>`;
+  if(p.repo && !gh) ghLoad(p.repo).then(renderProjDetail);
+}
+
+/* ---------- 服务与费用 ---------- */
+const SVC_CATS = ['数据库', '域名', '服务器/托管', '订阅', 'API', '其他'];
+const CYCLE = {month: '月付', year: '年付', once: '一次性', free: '免费'};
+const svcMonthly = s => s.cycle === 'month' ? +s.cost || 0 : s.cycle === 'year' ? (+s.cost || 0) / 12 : 0;
+const svcCost = s => s.cycle === 'free' || !+s.cost ? '免费' : `${money(s.cost)}${s.cycle === 'month' ? '/月' : s.cycle === 'year' ? '/年' : ''}`;
+function daysChip(d){
+  const n = daysFromToday(d); if(n === null) return '';
+  return `<span class="days ${n < 0 ? 'late' : n <= 30 ? 'soon' : ''}">${n < 0 ? `已过 ${-n} 天` : n === 0 ? '今天' : `${n} 天后`}</span>`;
+}
+function svcTotals(){
+  const list = services(), m = list.reduce((s, x) => s + svcMonthly(x), 0);
+  const soon = list.filter(x => x.renew && x.cycle !== 'free' && daysFromToday(x.renew) <= 30).sort((a, b) => a.renew.localeCompare(b.renew));
+  return {m, y: m * 12, soon, n: list.length};
+}
+function renderServices(){
+  const t = svcTotals();
+  $('svcStats').innerHTML = [['c-green', '每月合计', money(t.m), '年付已折算成每月'], ['c-blue', '每年合计', money(t.y), `${t.n} 个服务`],
+    ['c-red', '30 天内续费', t.soon.length, t.soon[0] ? `最近：${t.soon[0].name} ${t.soon[0].renew}` : '暂时没有'], ['c-yellow', '免费服务', services().filter(x => x.cycle === 'free' || !+x.cost).length, '额度用完可能要付费']]
+    .map(([c, k, v, s]) => `<div class="stat ${c}"><div class="k">${k}</div><div class="v num" style="font-size:26px">${v}</div><div class="s">${esc(s)}</div></div>`).join('');
+  const cats = ['all'].concat(SVC_CATS.filter(c => services().some(x => x.cat === c)));
+  $('svcSeg').innerHTML = cats.map(c => `<button data-c="${c}" class="${ui.svc === c ? 'on' : ''}">${c === 'all' ? '全部' : c}</button>`).join('');
+  const list = services().filter(x => ui.svc === 'all' || x.cat === ui.svc).sort((a, b) => (a.renew || '9999').localeCompare(b.renew || '9999'));
+  $('svcList').innerHTML = list.length ? list.map(x => { const p = findProj(x.project);
+    return `<tr data-sid="${esc(x.id)}"><td><div class="t">${esc(x.name)}</div><div class="meta">${x.account ? `<span>${esc(x.account)}</span>` : ''}${safeUrl(x.url) ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">控制台 ↗</a>` : ''}</div></td>
+      <td class="hide-s">${esc(x.cat || '')}</td><td class="r num">${svcCost(x)}<div class="sub">${CYCLE[x.cycle] || ''}</div></td>
+      <td>${x.renew ? `<div class="num" style="font-size:14px">${esc(x.renew)}</div>${daysChip(x.renew)}` : '<span class="sub">—</span>'}</td>
+      <td class="hide-s">${p ? `<a href="#proj-${esc(p.id)}" class="more">${esc(p.name)}</a>` : '<span class="sub">—</span>'}</td>
+      <td><div class="acts" style="opacity:1">${x.renew && (x.cycle === 'month' || x.cycle === 'year') ? `<button data-act="s-renew" aria-label="已续费，日期往后推" title="已续费">↻</button>` : ''}<button data-act="s-edit" aria-label="编辑">${ICON.edit}</button><button data-act="s-del" aria-label="删除">${ICON.del}</button></div></td></tr>`; }).join('')
+    : '<tr><td colspan="6" class="empty">还没有服务。比如 Supabase、域名、GitHub Pages、云服务器、各种订阅</td></tr>';
+}
+function openSvc(x, projectId){
+  openForm(x ? '编辑服务' : '添加服务', [
+    {k: 'name', label: '服务名称', value: x?.name, req: true, ph: 'Supabase'},
+    {k: 'cat', label: '类别', type: 'select', value: x?.cat || '数据库', opts: SVC_CATS.map(c => [c, c])},
+    {k: 'cost', label: '费用 (RM)', type: 'number', value: x?.cost ?? '', ph: '0'},
+    {k: 'cycle', label: '付费方式', type: 'select', value: x?.cycle || 'month', opts: Object.entries(CYCLE)},
+    {k: 'renew', label: '下次续费日期（可选）', type: 'date', value: x?.renew},
+    {k: 'project', label: '属于哪个项目', type: 'select', value: x?.project ?? projectId ?? '', opts: [['', '不属于特定项目']].concat(projects().map(p => [p.id, p.name]))},
+    {k: 'account', label: '登录账号（只填邮箱或用户名，不要填密码）', value: x?.account, ph: 'name@example.com'},
+    {k: 'url', label: '控制台网址', type: 'url', value: x?.url, ph: 'https://'},
+    {k: 'note', label: '备注', type: 'textarea', value: x?.note}
+  ], v => {
+    if(/password|密码|secret|sk_|token/i.test(v.note + v.account)) toast('提醒：请不要在这里保存密码或密钥');
+    v.cost = v.cost === '' ? 0 : +v.cost;
+    if(x) Object.assign(x, v); else { services().push({id: uid(), ...v}); log(`添加了服务「${v.name}」`, 'var(--blue)'); }
+    persist('station-services');
+  });
+}
+function addCycle(d, cycle){
+  // 往后推一个月或一年；遇到短月份（如 1 月 31 日 → 2 月）取那个月的最后一天，避免跳到 3 月
+  const [y, m, day] = d.split('-').map(Number);
+  const ty = cycle === 'month' ? y + Math.floor(m / 12) : y + 1, tm = cycle === 'month' ? m % 12 : m - 1;
+  const last = new Date(ty, tm + 1, 0).getDate();
+  return localDate(new Date(ty, tm, Math.min(day, last)));
+}
+
+/* ---------- 笔记 ---------- */
+function noteBody(text){
+  return String(text || '').split('```').map((part, i) => i % 2
+    ? `<div class="code"><button type="button" class="cp" data-copy>复制</button><pre>${esc(part.replace(/^[\w+-]*\n/, ''))}</pre></div>`
+    : part.trim() ? `<p>${esc(part.trim()).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\n/g, '<br>')}</p>` : '').join('');
+}
+function renderNotes(){
+  const tags = [...new Set(notes().flatMap(n => n.tags || []))];
+  $('noteTags').innerHTML = tags.length ? ['all'].concat(tags).map(t => `<button data-t="${esc(t)}" class="${ui.ntag === t ? 'on' : ''}">${t === 'all' ? '全部' : esc(t)}</button>`).join('') : '';
+  const q = (ui.nq || '').toLowerCase();
+  const list = notes().filter(n => (ui.ntag === 'all' || (n.tags || []).includes(ui.ntag)) && (!q || (n.title + ' ' + n.body + ' ' + (n.tags || []).join(' ')).toLowerCase().includes(q)))
+    .sort((a, b) => (b.upd || b.at) - (a.upd || a.at));
+  $('noteList').innerHTML = list.length ? list.map(n => { const p = findProj(n.project);
+    return `<details class="note-card" data-nid="${esc(n.id)}" ${ui.nopen === n.id ? 'open' : ''}><summary><b>${esc(n.title)}</b><span class="sub" style="white-space:nowrap">${ago(n.upd || n.at)}</span></summary>
+      <div class="meta" style="margin-top:4px">${(n.tags || []).map(t => `<span class="tagc">${esc(t)}</span>`).join('')}${p ? `<a href="#proj-${esc(p.id)}">${esc(p.name)}</a>` : ''}</div>
+      <div class="nbody">${noteBody(n.body)}</div>
+      <div style="display:flex;gap:8px"><button class="btn" data-act="n-edit">编辑</button><button class="btn" data-act="n-del">删除</button></div></details>`; }).join('')
+    : `<div class="empty">${notes().length ? '没有找到相关笔记' : '还没有笔记。比如常用的 git 命令、部署步骤、踩过的坑'}</div>`;
+}
+function openNote(n, projectId){
+  openForm(n ? '编辑笔记' : '新笔记', [
+    {k: 'title', label: '标题', value: n?.title, req: true, ph: 'GitHub Pages 部署步骤'},
+    {k: 'tags', label: '标签（用逗号分隔）', value: (n?.tags || []).join('，'), ph: 'git，部署'},
+    {k: 'project', label: '关联项目', type: 'select', value: n?.project ?? projectId ?? '', opts: [['', '不关联']].concat(projects().map(p => [p.id, p.name]))},
+    {k: 'body', label: '内容（代码用 ``` 包起来）', type: 'textarea', tall: true, value: n?.body}
+  ], v => {
+    const rec = {title: v.title, body: v.body, project: v.project, tags: v.tags.split(/[,，]/).map(s => s.trim()).filter(Boolean), upd: Date.now()};
+    if(n) Object.assign(n, rec); else { const id = uid(); notes().unshift({id, at: Date.now(), ...rec}); ui.nopen = id; log(`写了笔记「${v.title}」`, 'var(--blue)'); }
+    persist('station-notes');
+  });
+}
+
+/* ---------- 灵感 ---------- */
+const ISTAT = {new: '新想法', think: '考虑中', done: '已转项目', drop: '放弃'};
+function renderIdeas(){
+  const all = ideas();
+  $('ideaSeg').innerHTML = [['all', '全部', all.length]].concat(Object.entries(ISTAT).map(([k, v]) => [k, v, all.filter(i => i.status === k).length]))
+    .map(([k, v, c]) => `<button data-i="${k}" class="${ui.idea === k ? 'on' : ''}">${v} ${c}</button>`).join('');
+  const order = {new: 0, think: 1, done: 2, drop: 3};
+  const list = all.filter(i => ui.idea === 'all' || i.status === ui.idea).sort((a, b) => (order[a.status] - order[b.status]) || b.at - a.at);
+  $('ideaList').innerHTML = list.length ? list.map(i => { const p = i.projectId && findProj(i.projectId);
+    return `<div class="idea ${i.status}" data-iid="${esc(i.id)}"><div><div class="t">${esc(i.text)}</div>${i.note ? `<div class="note">${esc(i.note)}</div>` : ''}
+      <div class="meta"><span>${ago(i.at)}</span>${p ? `<a href="#proj-${esc(p.id)}">已转成项目「${esc(p.name)}」→</a>` : ''}</div></div>
+      <div class="iacts"><button class="istat ${i.status}" data-act="i-cycle" title="点击切换状态">${ISTAT[i.status]}</button>
+        ${i.status !== 'done' ? '<button class="btn" data-act="i-proj">转成项目</button>' : ''}
+        <button class="btn" data-act="i-edit">编辑</button><button class="btn" data-act="i-del" aria-label="删除">${ICON.del}</button></div></div>`; }).join('')
+    : `<div class="empty">${all.length ? '这个状态下没有想法' : '还没有灵感。有什么 App 点子、功能想法，先记在这里'}</div>`;
+}
+function addIdea(text){
+  text = text.trim(); if(!text) return false;
+  ideas().unshift({id: uid(), text, note: '', status: 'new', at: Date.now()});
+  log(`记下灵感「${text}」`, 'var(--yellow)'); persist('station-ideas'); toast('已记下');
+  return true;
+}
+function ideaToProject(i){
+  const p = {id: uid(), name: i.text.slice(0, 40), status: 'idea', progress: 0, next: '', link: '', start: todayStr(), note: i.note || i.text, repo: '', site: '', tasks: [], bugs: [], versions: []};
+  projects().unshift(p); i.status = 'done'; i.projectId = p.id;
+  log(`灵感「${i.text}」转成了项目`, 'var(--acc)');
+  persist('station-projects'); persist('station-ideas');
+  location.hash = 'proj-' + p.id; toast('已转成项目，接着拆任务吧');
+}
 /* ---------- 渲染：想买 ---------- */
 const wishSorter = by => by === 'price' ? (a, b) => (+b.price || 0) - (+a.price || 0) : (a, b) => ({high:0, medium:1, low:2}[a.priority] ?? 1) - ({high:0, medium:1, low:2}[b.priority] ?? 1);
 function renderWishes(){
@@ -1034,17 +1426,32 @@ function renderSide(){
   $('c-todos').textContent = loggedIn ? n.open : '';
   $('c-projects').textContent = n.allProj || '';
   $('c-wishes').textContent = n.left || '';
+  $('c-services').textContent = svcTotals().soon.length ? '!' + svcTotals().soon.length : '';
+  $('c-notes').textContent = notes().length || '';
+  $('c-ideas').textContent = ideas().filter(i => i.status === 'new' || i.status === 'think').length || '';
 }
-function renderAll(){ renderSide(); renderOverview(); renderGoals(); renderTodos(); renderProjects(); renderWishes(); renderReview(); }
+function renderAll(){
+  projects().forEach(p => { if(p.repo && p.repo !== normRepo(p.repo)) p.repo = normRepo(p.repo); }); // 旧数据或云端数据里可能是完整网址
+  renderSide(); renderOverview(); renderGoals(); renderTodos(); renderProjects(); renderWishes(); renderReview();
+  renderServices(); renderNotes(); renderIdeas();
+  if($('p-proj').classList.contains('on') && !document.activeElement?.closest?.('#projDetail form, #projDetail [data-addtask]')) renderProjDetail();
+}
 
 /* ---------- 路由 ---------- */
-const PAGES = ['overview', 'goals', 'todos', 'projects', 'wishes', 'review', 'prefs'];
+const PAGES = ['overview', 'goals', 'todos', 'projects', 'proj', 'services', 'notes', 'ideas', 'wishes', 'review', 'prefs'];
 function route(){
-  const p = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
+  const h = location.hash.slice(1);
+  let p = PAGES.includes(h) ? h : 'overview';
+  if(h.startsWith('proj-')){ p = 'proj'; ui.pid = h.slice(5); renderProjDetail(); }
+  if(p === 'proj' && !h.startsWith('proj-')) p = 'projects';
   PAGES.forEach(x => $('p-' + x).classList.toggle('on', x === p));
-  document.querySelectorAll('#side a').forEach(a => a.classList.toggle('on', a.dataset.p === p));
+  const navP = p === 'proj' ? 'projects' : p;
+  document.querySelectorAll('#side a, #morePanel a').forEach(a => a.classList.toggle('on', a.dataset.p === navP));
+  $('moreBtn').classList.toggle('on', !!document.querySelector('#side a.mx.on'));
+  $('morePanel').hidden = true;
   if(p === 'prefs') $('budgetIn').value = settings().budget || '';
   if(p === 'review'){ delete $('rvForm').dataset.key; renderReview(); }
+  if(p === 'notes') renderNotes();
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
@@ -1070,7 +1477,7 @@ $('budgetForm').addEventListener('submit', e => {
   toast(settings().budget ? '每月预算已设为 ' + money(settings().budget) : '已取消预算');
 });
 $('copyBackup').onclick = async () => {
-  const text = JSON.stringify({projects: projects(), wishes: wishes(), settings: settings(), exportedAt: new Date().toISOString()}, null, 2);
+  const text = JSON.stringify({...Object.fromEntries(KEYS.map(k => [k.replace('station-', ''), data[k]])), exportedAt: new Date().toISOString()}, null, 2);
   try{ await navigator.clipboard.writeText(text); toast('备份已复制'); }catch(e){ toast('复制失败，浏览器不允许访问剪贴板'); }
 };
 $('clearFeed').onclick = () => { const old = feed; feed = []; store.set('station-feed', feed); renderAll(); toast('已清空', () => { feed = old; store.set('station-feed', feed); renderAll(); }); };
@@ -1080,7 +1487,7 @@ const close = id => $(id).classList.remove('on');
 document.querySelectorAll('.sheet').forEach(sh => sh.addEventListener('click', e => { if(e.target === sh || e.target.closest('[data-close]')) close(sh.id); }));
 document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.sheet.on').forEach(s => close(s.id)); });
 document.addEventListener('click', e => { const b = e.target.closest('[data-new]'); if(!b) return;
-  ({proj: () => openProj(null), wish: () => openWish(null), goal: () => openGoal(null)})[b.dataset.new](); });
+  ({proj: () => openProj(null), wish: () => openWish(null), goal: () => openGoal(null), svc: () => openSvc(null), note: () => openNote(null)})[b.dataset.new](); });
 
 $('p-status').innerHTML = STATUS.map(s => `<option value="${s[0]}">${s[1]}</option>`).join('');
 $('p-prog').oninput = () => $('p-progv').textContent = $('p-prog').value + '%';
@@ -1088,25 +1495,111 @@ function openProj(p){
   editingProj = p ? p.id : null; $('projTitle').textContent = p ? '编辑项目' : '新项目';
   $('p-name').value = p?.name || ''; $('p-status').value = p?.status || 'dev'; $('p-prog').value = p?.progress ?? 0; $('p-prog').oninput();
   $('p-next').value = p?.next || ''; $('p-link').value = p?.link || ''; $('p-start').value = p?.start || todayStr(); $('p-note').value = p?.note || '';
+  $('p-repo').value = p?.repo || ''; $('p-site').value = p?.site || '';
   open('projSheet');
 }
 $('projForm').addEventListener('submit', e => {
   e.preventDefault();
-  const rec = {name: $('p-name').value.trim(), status: $('p-status').value, progress: +$('p-prog').value || 0,
+  const repoIn = $('p-repo').value.trim(), repo = normRepo(repoIn);
+  if(repoIn && !repo){ toast('GitHub 仓库请写成 用户名/仓库名，例如 Lai75/liji-app'); return; }
+  const rec = {name: $('p-name').value.trim(), status: $('p-status').value, progress: +$('p-prog').value || 0, repo, site: $('p-site').value.trim(),
     next: $('p-next').value.trim(), link: $('p-link').value.trim(), start: $('p-start').value, note: $('p-note').value.trim()};
   if(!rec.name) return;
   const ex = editingProj && projects().find(p => p.id === editingProj);
-  if(ex){ log(`更新了项目「${rec.name}」· ${ST[rec.status][1]} ${rec.progress}%`, 'var(--blue)'); Object.assign(ex, rec); }
-  else { projects().unshift({id: uid(), ...rec}); log(`新建了项目「${rec.name}」`, 'var(--yellow)'); }
+  if(ex){ log(`更新了项目「${rec.name}」`, 'var(--blue)'); Object.assign(ex, rec); }
+  else { projects().unshift({id: uid(), tasks: [], bugs: [], versions: [], ...rec}); log(`新建了项目「${rec.name}」`, 'var(--yellow)'); }
   close('projSheet'); persist('station-projects'); toast(ex ? '已保存' : '项目已添加');
+  if(rec.repo) ghLoad(rec.repo, true).then(renderAll);
+  if(rec.site) checkSite(rec.site);
 });
-$('projList').onclick = e => {
+
+/* 项目详情里的操作 */
+function projAct(e){
+  const p = findProj(ui.pid); if(!p) return;
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const act = b.dataset.act;
+  const tid = b.closest('[data-tid]')?.dataset.tid, task = tid && p.tasks.find(x => x.id === tid);
+  const bid = b.closest('[data-bid]')?.dataset.bid, bug = bid && p.bugs.find(x => x.id === bid);
+  const cols = ['todo', 'doing', 'done'];
+  if(act === 'p-edit') openProj(p);
+  if(act === 'p-del'){ const i = projects().indexOf(p); projects().splice(i, 1); persist('station-projects'); location.hash = 'projects';
+    toast('已删除“' + p.name + '”', () => { projects().splice(i, 0, p); persist('station-projects'); }); }
+  if(task && (act === 't-left' || act === 't-right')){
+    task.status = cols[Math.max(0, Math.min(2, cols.indexOf(task.status) + (act === 't-right' ? 1 : -1)))];
+    task.doneAt = task.status === 'done' ? todayStr() : undefined;
+    if(task.status === 'done') log(`完成任务「${task.title}」· ${p.name}`, 'var(--acc)');
+    persist('station-projects'); renderProjDetail();
+  }
+  if(task && act === 't-del'){ p.tasks.splice(p.tasks.indexOf(task), 1); persist('station-projects'); renderProjDetail(); }
+  if(bug && act === 'b-fix'){ bug.fixed = !bug.fixed; bug.fixedAt = bug.fixed ? todayStr() : undefined; if(bug.fixed) log(`修好 bug「${bug.title}」· ${p.name}`, 'var(--acc)'); persist('station-projects'); renderProjDetail(); }
+  if(bug && act === 'b-del'){ p.bugs.splice(p.bugs.indexOf(bug), 1); persist('station-projects'); renderProjDetail(); }
+  if(act === 'v-del'){ const vid = b.closest('[data-vid]').dataset.vid; p.versions = p.versions.filter(v => v.id !== vid); persist('station-projects'); renderProjDetail(); }
+  if(act === 'gh-refresh'){ toast('正在读取 GitHub…'); ghLoad(p.repo, true).then(() => { renderAll(); renderProjDetail(); }); }
+  if(act === 'svc-add') openSvc(null, p.id);
+  if(act === 'note-add') openNote(null, p.id);
+  if(act === 'note-open'){ ui.nopen = b.dataset.nid; location.hash = 'notes'; }
+}
+$('projDetail').addEventListener('click', projAct);
+$('projDetail').addEventListener('keydown', e => {
+  const inp = e.target.closest('[data-addtask]'); if(!inp || e.key !== 'Enter' || e.isComposing) return;
+  e.preventDefault();
+  const p = findProj(ui.pid), title = inp.value.trim(); if(!p || !title) return;
+  p.tasks.push({id: uid(), title, status: 'todo', at: todayStr()}); persist('station-projects'); renderProjDetail();
+  document.querySelector('#projDetail [data-addtask]')?.focus();
+});
+$('projDetail').addEventListener('submit', e => {
+  const f = e.target.closest('form[data-form]'); if(!f) return;
+  e.preventDefault();
+  const p = findProj(ui.pid); if(!p) return;
+  const v = Object.fromEntries(new FormData(f).entries());
+  if(f.dataset.form === 'bug'){ if(!v.title.trim()) return; p.bugs.unshift({id: uid(), title: v.title.trim(), sev: v.sev, fixed: false, at: todayStr()}); log(`记录 bug「${v.title.trim()}」· ${p.name}`, 'var(--red)'); }
+  if(f.dataset.form === 'ver'){ if(!v.ver.trim()) return; p.versions.unshift({id: uid(), ver: v.ver.trim(), date: v.date, notes: v.notes.trim()}); log(`${p.name} 发布了 ${v.ver.trim()}`, 'var(--acc)'); toast('版本已记录'); }
+  persist('station-projects'); renderProjDetail();
+  if(f.dataset.form === 'bug') document.querySelector('#projDetail form[data-form="bug"] input')?.focus();
+});
+$('ghRefresh').onclick = () => { toast('正在读取 GitHub…'); ghRefreshAll(true); checkAllSites(); };
+
+/* 服务 */
+seg('svcSeg', 'c', v => { ui.svc = v; renderServices(); });
+$('svcList').addEventListener('click', e => {
   const b = e.target.closest('button[data-act]'); if(!b) return;
-  const arr = projects(), i = arr.findIndex(p => p.id === b.closest('.proj').dataset.id); if(i < 0) return;
-  if(b.dataset.act === 'edit') openProj(arr[i]);
-  if(b.dataset.act === 'del'){ const [rec] = arr.splice(i, 1); log(`删除了项目「${rec.name}」`, 'var(--faint)'); persist('station-projects');
-    toast('已删除“' + rec.name + '”', () => { projects().splice(i, 0, rec); persist('station-projects'); }); }
-};
+  const x = services().find(s => s.id === b.closest('tr').dataset.sid); if(!x) return;
+  if(b.dataset.act === 's-edit') openSvc(x);
+  if(b.dataset.act === 's-renew'){ const old = x.renew; do x.renew = addCycle(x.renew, x.cycle); while(daysFromToday(x.renew) < 0); persist('station-services'); toast(`已续费，下次 ${x.renew}`, () => { x.renew = old; persist('station-services'); }); }
+  if(b.dataset.act === 's-del'){ const i = services().indexOf(x); services().splice(i, 1); persist('station-services'); toast('已删除“' + x.name + '”', () => { services().splice(i, 0, x); persist('station-services'); }); }
+});
+
+/* 笔记 */
+seg('noteTags', 't', v => { ui.ntag = v; renderNotes(); });
+$('noteSearch').addEventListener('input', e => { ui.nq = e.target.value.trim(); renderNotes(); });
+$('noteList').addEventListener('toggle', e => { const d = e.target.closest?.('details'); if(d && d.open) ui.nopen = d.dataset.nid; }, true);
+$('noteList').addEventListener('click', async e => {
+  const cp = e.target.closest('[data-copy]');
+  if(cp){ try{ await navigator.clipboard.writeText(cp.nextElementSibling.textContent); toast('已复制'); }catch(err){ toast('复制失败，浏览器不允许访问剪贴板'); } return; }
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const n = notes().find(x => x.id === b.closest('[data-nid]').dataset.nid); if(!n) return;
+  if(b.dataset.act === 'n-edit') openNote(n);
+  if(b.dataset.act === 'n-del'){ const i = notes().indexOf(n); notes().splice(i, 1); persist('station-notes'); toast('已删除笔记', () => { notes().splice(i, 0, n); persist('station-notes'); }); }
+});
+
+/* 灵感 */
+seg('ideaSeg', 'i', v => { ui.idea = v; renderIdeas(); });
+$('ideaForm').addEventListener('submit', e => { e.preventDefault(); if(addIdea($('ideaIn').value)) $('ideaIn').value = ''; });
+$('ovIdeaForm').addEventListener('submit', e => { e.preventDefault(); if(addIdea($('ovIdeaIn').value)) $('ovIdeaIn').value = ''; });
+$('ideaList').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const i = ideas().find(x => x.id === b.closest('[data-iid]').dataset.iid); if(!i) return;
+  const act = b.dataset.act;
+  if(act === 'i-cycle'){ i.status = {new: 'think', think: 'drop', drop: 'new', done: 'done'}[i.status]; persist('station-ideas'); }
+  if(act === 'i-proj') ideaToProject(i);
+  if(act === 'i-edit') openForm('编辑想法', [{k: 'text', label: '想法', value: i.text, req: true}, {k: 'note', label: '补充说明', type: 'textarea', value: i.note}], v => { Object.assign(i, v); persist('station-ideas'); });
+  if(act === 'i-del'){ const k = ideas().indexOf(i); ideas().splice(k, 1); persist('station-ideas'); toast('已删除', () => { ideas().splice(k, 0, i); persist('station-ideas'); }); }
+});
+
+/* 手机“更多”菜单 */
+$('morePanel').innerHTML = [...document.querySelectorAll('#side a.mx')].map(a => a.outerHTML.replace(/<span class="cnt"[^>]*>.*?<\/span>/, '').replace(/ style="[^"]*"/, '')).join('');
+$('moreBtn').addEventListener('click', () => { const p = $('morePanel'); p.hidden = !p.hidden; $('moreBtn').setAttribute('aria-expanded', String(!p.hidden)); });
+document.addEventListener('click', e => { if(!e.target.closest('#morePanel, #moreBtn')) $('morePanel').hidden = true; });
 
 function openWish(w){
   editingWish = w ? w.id : null; $('wishTitle').textContent = w ? '编辑' : '添加想买的';
@@ -1142,8 +1635,9 @@ let formSave = null;
 function openForm(title, fields, onSave){
   $('genTitle').textContent = title;
   $('genFields').innerHTML = fields.map(f => `<label>${f.label}${f.type === 'textarea'
-    ? `<textarea data-k="${f.k}" placeholder="${esc(f.ph || '')}">${esc(f.value || '')}</textarea>`
-    : `<input data-k="${f.k}" type="${f.type || 'text'}" value="${esc(f.value || '')}" placeholder="${esc(f.ph || '')}" ${f.req ? 'required' : ''}>`}</label>`).join('');
+    ? `<textarea data-k="${f.k}" class="${f.tall ? 'tall' : ''}" placeholder="${esc(f.ph || '')}">${esc(f.value || '')}</textarea>`
+    : f.type === 'select' ? `<select data-k="${f.k}">${f.opts.map(([v, l]) => `<option value="${esc(v)}" ${String(f.value ?? '') === String(v) ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`
+    : `<input data-k="${f.k}" type="${f.type || 'text'}" value="${esc(f.value ?? '')}" placeholder="${esc(f.ph || '')}" ${f.type === 'number' ? 'min="0" step="0.01" inputmode="decimal"' : ''} ${f.req ? 'required' : ''}>`}</label>`).join('');
   formSave = onSave; open('formSheet');
 }
 $('genForm').addEventListener('submit', e => {
@@ -1240,6 +1734,8 @@ $('acctOut').hidden = !!session; $('acctIn').hidden = !session;
 route();
 renderAll();
 sync();
+ghRefreshAll(false); checkAllSites();
+setInterval(() => { if(document.visibilityState === 'visible') ghRefreshAll(false); }, 10 * 60e3);
 setInterval(() => { if(document.visibilityState === 'visible' && loggedIn) sync(); }, 60000);
 window.addEventListener('online', sync);
 }
