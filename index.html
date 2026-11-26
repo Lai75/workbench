@@ -166,7 +166,22 @@ input[type=range]{padding:0;accent-color:var(--acc);border:0;background:none;box
 #toast button{color:var(--acc2);font-weight:600}
 /* 仪表盘 */
 .dash{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;align-items:start}
-.s8{grid-column:span 8}.s4{grid-column:span 4}
+.s8{grid-column:span 8}.s4{grid-column:span 4}.s6{grid-column:span 6}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpi{display:flex;flex-direction:column;gap:2px;padding:16px 20px;text-decoration:none;color:inherit}
+.kpi+.kpi{border-left:1px solid var(--line)}
+.kpi:hover{background:var(--soft)}
+.kpi .k{font-size:14px;color:var(--muted)}
+.kpi .v{font-size:clamp(30px,3vw,40px);font-weight:700;line-height:1.1;letter-spacing:-.02em;white-space:nowrap}
+.kpi .v small{font-size:.45em;font-weight:500;color:var(--muted);margin-left:3px;letter-spacing:0}
+.kpi .s{font-size:13px;color:var(--muted)}.kpi .s b{color:var(--good);font-weight:600}
+.orow{display:grid;gap:4px;padding:12px 20px;border-top:1px solid var(--line);text-decoration:none;color:inherit}
+.orow:hover{background:var(--soft)}
+.orow .l1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.orow .l1 b{font-weight:600;overflow-wrap:anywhere}
+#ovNow .grp{border-top:1px solid var(--line)}
+#p-overview .dash{align-items:stretch}
+#ovNow .step{padding-left:20px;padding-right:20px}
 .cap{margin:2px 0 0;font-size:13px;color:var(--faint);line-height:1.45}
 .stat .d{font-size:13px;color:var(--muted)}.stat .d b{font-weight:600;color:var(--good)}
 .vchart{position:relative;height:190px;margin:4px 20px 0 52px}
@@ -373,7 +388,8 @@ details.rv summary{cursor:pointer;display:flex;justify-content:space-between;gap
 details.rv p{margin:6px 0 0;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
 details.rv b{font-weight:500;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){#toast{transition:none}}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:minmax(0,1fr)}.s8{grid-column:span 12}.s4{grid-column:span 6}}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:minmax(0,1fr)}.s8{grid-column:span 12}.s4{grid-column:span 6}#p-overview .s4{grid-column:span 12}}
+@media(max-width:700px){.s6{grid-column:span 12}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi:nth-child(3){border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--line)}.kpi{padding:14px 16px}}
 @media(max-width:700px){.s4{grid-column:span 12}.vchart{margin-left:40px;margin-right:12px}.vchart .c:nth-child(odd) .x{visibility:hidden}}
 @media(max-width:760px){
   .app{grid-template-columns:minmax(0,1fr)}
@@ -419,93 +435,25 @@ details.rv b{font-weight:500;color:var(--muted)}
   <main>
     <!-- 总览 -->
     <section class="page" id="p-overview">
+      <div class="ph"><div><h1 id="greet">你好</h1><p id="today"></p></div></div>
       <div id="ovBanner"></div>
-      <div class="bento">
-        <section class="tile w2 h2 hero">
-          <div class="tl"><span id="today"></span><a href="#todos">全部待办 →</a></div>
-          <div class="heroTop"><div><h1 id="greet">你好</h1><p class="sub" id="greetSub"></p></div><div class="clock num" id="clock"></div></div>
-          <div class="tl" style="margin-top:4px"><span>今天要处理</span><span id="heroCount"></span></div>
-          <div class="list" id="ovTodos"></div>
-        </section>
-
-        <section class="tile" data-tip="连续每周都至少完成 1 个小步骤的周数">
-          <div class="tl"><span>连续推进</span><i class="ico" id="icoStreak"></i></div>
-          <div class="big num" id="tStreak">0<small>周</small></div>
-          <div class="dots" id="tStreakDots"></div>
-          <div class="sub" id="tStreakSub"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>本周计划</span><a href="#goals">挑小步骤 →</a></div>
-          <div class="ringRow"><div id="tWeekRing"></div><div><div class="big num" id="tWeekNum"></div><div class="sub" id="tWeekSub"></div></div></div>
-        </section>
-
-        <section class="tile w2">
-          <div class="tl"><span>目标进度</span><a href="#goals">全部目标 →</a></div>
-          <div class="goalRings" id="tGoals"></div>
-        </section>
-
-        <section class="tile w2">
-          <div class="tl"><span>每周完成的小步骤 · 最近 12 周</span><span id="cWeeksCap"></span></div>
+      <section class="box kpis" id="kpis"></section>
+      <div class="dash">
+        <section class="box panel s8">
+          <div class="hd"><div><h2>每周推进</h2><p class="cap" id="cWeeksCap"></p></div><a class="more" href="#goals">去目标 →</a></div>
           <div class="vchart" id="cWeeks"></div>
         </section>
-
-        <section class="tile h2">
-          <div class="tl"><span>本周要推进 <b id="ovWeekTag"></b></span><a href="#goals">去挑 →</a></div>
-          <div class="list" id="ovWeek"></div>
+        <section class="box panel s4">
+          <div class="hd"><h2>今天要做</h2><a class="more" href="#todos">全部待办 →</a></div>
+          <div id="ovNow"></div>
         </section>
-
-        <section class="tile">
-          <div class="tl"><span>心愿预算</span><a href="#wishes">清单 →</a></div>
-          <div id="tWish"></div>
+        <section class="box panel s6">
+          <div class="hd"><div><h2>目标进度</h2><p class="cap">长条是已完成，竖线是时间已过；长条超过竖线就是领先</p></div><a class="more" href="#goals">全部 →</a></div>
+          <div id="cGoals"></div>
         </section>
-
-        <section class="tile">
-          <div class="tl"><span>回顾打分</span><a href="#review">去回顾 →</a></div>
-          <div class="fig" id="cScore"><svg role="img" aria-label="最近 12 周回顾打分折线图"></svg></div>
-          <div class="sub" id="cScoreCap"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>待办分布</span><a href="#todos">全部 →</a></div>
-          <div id="cTodos"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>项目状态</span><a href="#projects">全部 →</a></div>
-          <div class="big num" id="tProjNum"></div>
-          <div id="cProj"></div>
-        </section>
-
-        <section class="tile w2">
-          <div class="tl"><span>我的 App</span><a href="#projects">管理 →</a></div>
-          <div class="apps" id="tApps"></div>
-        </section>
-
-        <section class="tile w2">
-          <div class="tl"><span>最近提交 · GitHub</span><a href="#projects">全部项目 →</a></div>
-          <div class="list" id="tCommits"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>服务费用</span><a href="#services">全部 →</a></div>
-          <div id="tSvc"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>灵感箱</span><a href="#ideas">全部 →</a></div>
-          <form id="ovIdeaForm" style="display:flex;gap:6px"><input id="ovIdeaIn" placeholder="记下一个想法…" autocomplete="off" style="min-height:36px;font-size:15px"></form>
-          <div class="list" id="tIdeas"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>累计成就</span></div>
-          <div class="ach" id="tAch"></div>
-        </section>
-
-        <section class="tile">
-          <div class="tl"><span>最近动态</span></div>
-          <ul class="feed" id="feed"></ul>
+        <section class="box panel s6">
+          <div class="hd"><h2>进行中的项目</h2><a class="more" href="#projects">全部 →</a></div>
+          <div id="ovProj"></div>
         </section>
       </div>
     </section>
@@ -901,54 +849,39 @@ function weekCounts(){
 function tickClock(){ const d = new Date(); $('clock').textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; }
 
 function renderOverview(){
-  const n = numbers(), b = budgetInfo(), h = new Date().getHours();
+  const n = numbers(), h = new Date().getHours();
   const word = h < 5 ? '夜深了' : h < 11 ? '早安' : h < 13 ? '中午好' : h < 18 ? '下午好' : '晚上好';
   const wk = wkOf(0), focus = allSteps().filter(x => x.st.week === wk), fd = focus.filter(x => x.st.done).length;
-  const gsAll = goals().map(g => goalStats(g));
+  const gsAll = goals().map(g => goalStats(g)), behind = gsAll.filter(s => s.state[1] === 'behind').length;
+  const gAvg = gsAll.length ? Math.round(gsAll.reduce((s, x) => s + x.pct, 0) / gsAll.length) : 0;
   const wc = weekCounts(), cnt = off => wc[wkOf(off)] || 0;
   const thisW = cnt(0), lastW = cnt(-1), diff = thisW - lastW;
-  const dow = new Date().getDay();
+  let streak = 0, o = thisW ? 0 : -1;
+  while(cnt(o) > 0 && streak < 520){ streak++; o--; }
+  const st = svcTotals(), dow = new Date().getDay();
 
+  // 标题直接给结论
+  const parts = [];
+  if(loggedIn) parts.push(n.due ? `今天有 ${n.due} 件事到期` : '今天没有到期的事');
+  parts.push(thisW ? `本周已推进 ${thisW} 步` : focus.length ? `本周计划 ${focus.length} 步还没开始` : '本周还没推进');
+  $('greet').textContent = `${word}，${parts.join('，')}`;
+  $('today').textContent = new Date().toLocaleDateString('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
   $('ovBanner').innerHTML = !reviews()[wk] && (dow === 0 || dow >= 5) ? `<div class="banner"><span>这周快结束了，花几分钟写个回顾吧</span><a href="#review">写本周回顾 →</a></div>`
     : dow === 1 && !reviews()[wkOf(-1)] && goals().length ? `<div class="banner"><span>上周的回顾还没写</span><a href="#review" data-rw="-1">补写上周回顾 →</a></div>` : '';
 
-  // 主卡：问候、时钟、今天要处理
-  $('today').textContent = new Date().toLocaleDateString('zh-CN', {month:'long', day:'numeric', weekday:'long'});
-  $('greet').textContent = word;
-  $('greetSub').innerHTML = !loggedIn ? '登录黎记后，这里会显示今天要处理的事' : n.due ? `今天有 <b style="color:var(--red)">${n.due}</b> 件事到期或已逾期` : '今天没有到期的事，可以推进目标';
-  tickClock();
-  const todayList = tasks.filter(t => !t.completed).sort(byDue).slice(0, 5);
-  $('heroCount').textContent = loggedIn ? `待办共 ${n.open} 件` : '';
-  $('ovTodos').innerHTML = !loggedIn ? loginNotice : todayList.length ? todayList.map(todoRow).join('') : '<div class="empty">没有待办，轻松一下</div>';
+  // 关键数字
+  const kpis = [
+    ['#todos', '今天到期', loggedIn ? n.due : '–', loggedIn ? `待办共 ${n.open} 件` : '登录黎记后显示'],
+    ['#goals', '本周推进', `${thisW}<small>步</small>`, diff > 0 ? `比上周 <b>+${diff}</b>` : diff < 0 ? `比上周 ${diff}` : streak ? `已连续 ${streak} 周` : '完成小步骤后计入'],
+    ['#goals', '目标完成', `${gAvg}<small>%</small>`, !goals().length ? '还没有设定目标' : behind ? `<span style="color:var(--bad)">${behind} 个落后</span>` : '全部按计划'],
+    ['#services', '每月固定支出', `<small style="margin:0 4px 0 0">RM</small>${Math.round(st.m).toLocaleString('en-MY')}`, st.soon.length ? `<span style="color:var(--warn)">${st.soon.length} 个服务 30 天内续费</span>` : `${st.n} 个服务`]];
+  $('kpis').innerHTML = kpis.map(([href, k, v, s]) => `<a class="kpi" href="${href}"><span class="k">${k}</span><span class="v num">${v}</span><span class="s">${s}</span></a>`).join('');
 
-  // 连续推进
-  let streak = 0, o = thisW ? 0 : -1;
-  while(cnt(o) > 0 && streak < 520){ streak++; o--; }
-  const best = Math.max(0, ...Object.values(wc));
-  $('icoStreak').innerHTML = ICON.step;
-  $('tStreak').innerHTML = `${streak}<small>周</small>`;
-  $('tStreakDots').innerHTML = Array.from({length: 12}, (_, i) => { const off = i - 11, c = cnt(off);
-    return `<i class="${c ? 'on' : ''} ${off === 0 ? 'cur' : ''}" data-tip="${off === 0 ? '本周' : '第 ' + +wkOf(off).split('-W')[1] + ' 周'}：${c} 步"></i>`; }).join('');
-  $('tStreakSub').innerHTML = streak ? (thisW ? '本周已推进，保持住' : '本周还没推进，完成 1 步就能续上') : best ? `最佳一周完成 ${best} 步` : '每周完成 1 个小步骤就算推进';
-
-  // 本周计划
-  const wpct = focus.length ? Math.round(fd / focus.length * 100) : 0;
-  $('tWeekRing').innerHTML = ringSvg(wpct, 84, `${wpct}%`);
-  $('tWeekNum').innerHTML = `${fd}<small>/ ${focus.length} 步</small>`;
-  $('tWeekSub').innerHTML = !focus.length ? '还没挑本周要推进的小步骤' : fd === focus.length ? '本周计划全部完成' : `还差 ${focus.length - fd} 步`;
-  if(thisW || lastW) $('tWeekSub').innerHTML += `<br>本周共完成 ${thisW} 步，${diff > 0 ? `比上周 <b>+${diff}</b>` : diff < 0 ? `比上周 ${diff}` : '和上周持平'}`;
-
-  // 目标进度环
-  $('tGoals').innerHTML = goals().length ? goals().slice(0, 4).map((g, i) => { const gs = gsAll[i];
-    return `<div class="gr" data-tip="${esc(g.title)}<br>完成 ${gs.pct}% · 时间已过 ${gs.time ?? '–'}%${gs.months !== null ? ' · 还剩 ' + gs.months + ' 个月' : ''}">${ringSvg(gs.pct, 64, gs.pct + '%')}
-      <div style="min-width:0"><div class="nm">${esc(g.title)}</div>${gs.state[0] ? `<span class="state ${gs.state[1]}">${gs.state[0]}</span>` : ''}</div></div>`; }).join('')
-    : '<div class="notice"><span>写下一个两年后想达成的大目标，再拆成小步骤</span><button class="btn" data-new="goal">＋ 新目标</button></div>';
-
-  // 每周柱状图
+  // 每周推进柱状图
   const weeks = Array.from({length: 12}, (_, i) => { const off = i - 11, r = weekRange(off), key = weekKey(r[2]);
-    return {off, key, no: +key.split('-W')[1], range: r, count: wc[key] || 0, score: reviews()[key]?.score || 0}; });
+    return {off, no: +key.split('-W')[1], range: r, count: wc[key] || 0}; });
   const total12 = weeks.reduce((s, w) => s + w.count, 0);
-  $('cWeeksCap').textContent = total12 ? `共 ${total12} 步 · 平均 ${(total12 / 12).toFixed(1)} 步/周` : '';
+  $('cWeeksCap').textContent = total12 ? `最近 12 周完成 ${total12} 个小步骤${streak ? `，已连续推进 ${streak} 周` : ''}` : '每周完成的小步骤';
   const max = Math.max(4, ...weeks.map(w => w.count)), step = max <= 6 ? 2 : max <= 12 ? 4 : Math.ceil(max / 3 / 5) * 5, top = Math.ceil(max / step) * step;
   const ticks = []; for(let v = 0; v <= top; v += step) ticks.push(v);
   $('cWeeks').innerHTML = `<div class="grid">${ticks.map(v => `<div class="gl ${v ? '' : 'base'}" style="bottom:${v / top * 100}%"><span>${v}</span></div>`).join('')}</div>
@@ -956,76 +889,34 @@ function renderOverview(){
       <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;width:100%">
       ${w.off === 0 || (w.count && w.count === max) ? `<span class="v">${w.count}</span>` : ''}<div class="b" style="height:${w.count / top * 100}%"></div></div>
       <span class="x">${w.off === 0 ? '本周' : w.no}</span></div>`).join('')}</div>
-    ${total12 ? '' : '<div class="emptymsg">完成小步骤后，这里会显示每周推进了多少</div>'}`;
+    ${total12 ? '' : '<div class="emptymsg">完成目标里的小步骤后，这里会显示每周推进了多少</div>'}`;
 
-  // 本周要推进
-  $('ovWeekTag').textContent = focus.length ? `${fd}/${focus.length}` : '';
-  $('ovWeek').innerHTML = focus.length ? focus.map(stepRow).join('')
-    : `<div class="notice"><span>${goals().length ? '到目标页，点小步骤旁的“本周”，它就会出现在这里。' : '设定目标后，可以每周挑几步来推进。'}</span></div>`;
+  // 今天要做：本周小步骤 + 黎记待办
+  const openSteps = focus.filter(x => !x.st.done);
+  const todo = tasks.filter(t => !t.completed && t.dueDate && daysFromToday(t.dueDate) <= 1).sort(byDue).slice(0, 5);
+  $('ovNow').innerHTML =
+    `<div class="grp">本周小步骤 · ${fd}/${focus.length}</div>` +
+    (openSteps.length ? openSteps.map(stepRow).join('') : `<div class="notice" style="padding-top:2px">${focus.length ? '本周计划都完成了' : '到目标页点“本周”，挑几步来推进'}</div>`) +
+    `<div class="grp">黎记待办 · 今天和明天</div>` +
+    (!loggedIn ? '<div class="notice" style="padding-top:2px"><span>登录后显示</span><a class="btn" href="#prefs">去登录</a></div>'
+      : todo.length ? todo.map(todoRow).join('') : '<div class="notice" style="padding-top:2px">今天和明天没有到期的待办</div>');
 
-  // 心愿预算
-  if(b.budget){
-    const pct = Math.min(100, Math.round(b.spent / b.budget * 100));
-    $('tWish').innerHTML = `<div class="big num" style="color:${b.left < 0 ? 'var(--red)' : 'inherit'}"><small style="margin:0 4px 0 0">${b.left < 0 ? '超出 RM' : 'RM'}</small>${Math.round(Math.abs(b.left)).toLocaleString('en-MY')}</div>
-      <div class="sub">${b.left < 0 ? '本月心愿已超预算' : '本月还能花在心愿上'}</div>
-      <div class="meter ${b.left < 0 ? 'over' : ''}" data-tip="本月已买 ${money(b.spent)} / 预算 ${money(b.budget)}"><i style="width:${pct}%"></i></div>
-      <div class="sub">${n.left} 件待购 · ${money(n.leftSum)}</div>`;
-  } else {
-    $('tWish').innerHTML = `<div class="big num"><small style="margin:0 4px 0 0">RM</small>${Math.round(n.leftSum).toLocaleString('en-MY')}</div><div class="sub">${n.left} 件待购</div><a class="more" href="#prefs" style="font-size:13px;margin-top:auto">设置每月预算 →</a>`;
-  }
+  // 目标进度
+  $('cGoals').innerHTML = goals().length ? goals().map((g, i) => { const gs = gsAll[i], t = gs.time ?? 0;
+    return `<div class="bul" data-tip="${esc(g.title)}<br>完成 ${gs.pct}% · 时间已过 ${gs.time ?? '–'}%"><div class="l1"><b>${esc(g.title)}</b>${gs.state[0] ? `<span class="state ${gs.state[1]}">${gs.state[0]}</span>` : ''}</div>
+      <div class="track"><i style="width:${gs.pct}%"></i>${gs.time !== null ? `<em style="left:calc(${t}% - 1px)"></em>` : ''}</div>
+      <div class="nums"><span>完成 <b class="num" style="color:var(--ink)">${gs.pct}%</b></span><span>时间已过 ${gs.time ?? '–'}%</span>${gs.months !== null ? `<span>还剩 ${gs.months} 个月</span>` : ''}</div></div>`; }).join('')
+    : '<div class="notice"><span>写下一个两年后想达成的大目标，再拆成小步骤</span><button class="btn" data-new="goal">＋ 新目标</button></div>';
 
-  // 回顾打分
-  const scored = weeks.filter(w => w.score);
-  $('cScoreCap').textContent = scored.length ? `平均 ${(scored.reduce((s, w) => s + w.score, 0) / scored.length).toFixed(1)} 分 · 已打分 ${scored.length} 周` : '在每周回顾里打 1–5 分';
-  scoreWeeks = weeks; drawScore();
-
-  // 待办分布
-  if(!loggedIn) $('cTodos').innerHTML = '<div class="notice"><span>登录黎记后显示</span><a class="btn" href="#prefs">去登录</a></div>';
-  else {
-    const open = tasks.filter(t => !t.completed);
-    const rows = Object.entries(LISTS).map(([k, v]) => { const list = open.filter(t => (t.listId || 'inbox') === k);
-      return {name: v[0], n: list.length, late: list.filter(t => t.dueDate && daysFromToday(t.dueDate) < 0).length}; });
-    const mx = Math.max(1, ...rows.map(r => r.n));
-    $('cTodos').innerHTML = `<div class="hbars">${rows.map(r => `<div class="hb" data-tip="${r.name}：${r.n} 件未完成${r.late ? `，${r.late} 件逾期` : ''}">
-      <span>${r.name}</span><div class="tr"><i style="width:${r.n / mx * 100}%"></i></div><span class="n">${r.n}</span></div>`).join('')}</div>`;
-  }
-
-  // 项目状态
-  const all = projects(), counts = STATUS.map(s => ({s, n: all.filter(p => p.status === s[0]).length}));
-  $('tProjNum').innerHTML = all.length ? `${n.active}<small>个推进中</small>` : '0<small>个项目</small>';
-  $('cProj').innerHTML = all.length ? `<div class="stack">${counts.filter(c => c.n).map(c => `<i style="--c:${c.s[2]};flex:${c.n}" data-tip="${c.s[1]}：${c.n} 个"></i>`).join('')}</div>
-    <div class="legend">${counts.filter(c => c.n).map(c => `<span><i style="--c:${c.s[2]}"></i>${c.s[1]} ${c.n}</span>`).join('')}</div>`
-    : '<button class="btn" data-new="proj" style="margin-top:auto">＋ 新项目</button>';
-
-  // 累计成就
-  const allDone = allSteps().filter(x => x.st.done).length, rvN = Object.keys(reviews()).length, bought = wishes().filter(w => w.bought).length;
-  const live = all.filter(p => p.status === 'live').length;
-  $('tAch').innerHTML = [['完成的小步骤', allDone], ['写过的回顾', rvN], ['上线的项目', live], ['买到的心愿', bought]]
-    .map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('');
-
-  // 我的 App：填了线上网址的项目
-  const apps = projects().filter(p => safeUrl(p.site));
-  $('tApps').innerHTML = apps.length ? apps.map((p, i) => { const gh = p.repo && GH[p.repo];
-    return `<a class="app2" href="${esc(p.site)}" target="_blank" rel="noopener" data-tip="${esc(p.name)}<br>${esc(p.site)}"><span class="ic" style="background:${appColor(p.id)}">${esc(p.name.trim().charAt(0).toUpperCase())}</span>
-      <span style="min-width:0"><b>${esc(p.name)}</b><small>${siteLabel(p.site) || '打开 ↗'}${gh?.info ? ' · ' + agoIso(gh.info.pushed) + '更新' : ''}</small></span></a>`; }).join('')
-    : '<div class="notice"><span>给项目填上“线上网址”，它就会出现在这里，一点就打开</span><a class="btn" href="#projects">去填写</a></div>';
-  // 最近提交
-  const cm = allCommits().slice(0, 5);
-  $('tCommits').innerHTML = cm.length ? cm.map(c => `<a class="commit" href="${esc(c.url)}" target="_blank" rel="noopener"><span class="m">${esc(c.msg)}</span><span class="sub">${agoIso(c.at)}</span><small>${esc(c.proj.name)} · ${esc(c.sha)}</small></a>`).join('')
-    : `<div class="notice"><span>${projects().some(p => p.repo) ? '正在读取 GitHub…' : '给项目填上 GitHub 仓库，这里会显示所有仓库的最新提交'}</span></div>`;
-  // 服务费用
-  const st = svcTotals();
-  $('tSvc').innerHTML = `<div class="big num"><small style="margin:0 4px 0 0">RM</small>${Math.round(st.m).toLocaleString('en-MY')}<small>/月</small></div>
-    <div class="sub">${st.n ? `${st.n} 个服务 · 每年约 ${money(st.y)}` : '还没有记录服务'}</div>
-    ${st.soon.slice(0, 2).map(x => `<div class="sub" style="display:flex;justify-content:space-between;gap:6px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.name)}</span>${daysChip(x.renew)}</div>`).join('')}`;
-  // 灵感
-  const live2 = ideas().filter(i => i.status === 'new' || i.status === 'think');
-  $('tIdeas').innerHTML = live2.slice(0, 3).map(i => `<div class="sub" style="padding:4px 0;border-top:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.text)}</div>`).join('')
-    + (live2.length > 3 ? `<a class="more" href="#ideas" style="font-size:13px">还有 ${live2.length - 3} 个 →</a>` : '');
-  $('feed').innerHTML = feed.length ? feed.slice(0, 4).map(f => `<li style="--c:${f.color}">${esc(f.text)}<time>${ago(f.at)}</time></li>`).join('')
-    : '<li>这里会记录你在工作台上的操作<time>添加项目或心愿后显示</time></li>';
+  // 进行中的项目
+  const order = {dev: 0, test: 1, idea: 2};
+  const act = projects().filter(p => p.status in order).sort((a, b) => order[a.status] - order[b.status]).slice(0, 5);
+  $('ovProj').innerHTML = act.length ? act.map(p => { const s = ST[p.status], prog = projProg(p), gh = p.repo && GH[p.repo], bugs = (p.bugs || []).filter(b => !b.fixed).length, t = p.tasks || [];
+    return `<a class="orow" href="#proj-${esc(p.id)}"><div class="l1"><b>${esc(p.name)}</b><span class="num">${prog}%</span></div>
+      <div class="bar"><i style="width:${prog}%"></i></div>
+      <div class="meta"><span class="pill" style="--c:${s[2]}">${s[1]}</span>${t.length ? `<span>任务 ${t.filter(x => x.status === 'done').length}/${t.length}</span>` : ''}${bugs ? `<span style="color:var(--bad)">${bugs} 个 bug</span>` : ''}${gh?.info ? `<span>${agoIso(gh.info.pushed)}提交</span>` : ''}</div></a>`; }).join('')
+    : '<div class="notice"><span>还没有进行中的项目</span><button class="btn" data-new="proj">＋ 新项目</button></div>';
 }
-setInterval(() => { if($('p-overview').classList.contains('on')) tickClock(); }, 15000);
 
 // 回顾打分折线：按实际像素绘制，尺寸变化时重画
 let scoreWeeks = [];
@@ -1045,7 +936,7 @@ function drawScore(){
   s.innerHTML = g + lab + `<path d="${path}" fill="none" style="stroke:var(--acc)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>` + dots + none + hits;
 }
 const scoreRO = new ResizeObserver(drawScore);
-scoreRO.observe($('cScore'));
+if($('cScore')) scoreRO.observe($('cScore'));
 
 // 悬停提示
 document.addEventListener('mouseover', e => {
@@ -1593,7 +1484,6 @@ $('noteList').addEventListener('click', async e => {
 /* 灵感 */
 seg('ideaSeg', 'i', v => { ui.idea = v; renderIdeas(); });
 $('ideaForm').addEventListener('submit', e => { e.preventDefault(); if(addIdea($('ideaIn').value)) $('ideaIn').value = ''; });
-$('ovIdeaForm').addEventListener('submit', e => { e.preventDefault(); if(addIdea($('ovIdeaIn').value)) $('ovIdeaIn').value = ''; });
 $('ideaList').addEventListener('click', e => {
   const b = e.target.closest('button[data-act]'); if(!b) return;
   const i = ideas().find(x => x.id === b.closest('[data-iid]').dataset.iid); if(!i) return;
