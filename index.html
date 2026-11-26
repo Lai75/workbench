@@ -156,6 +156,49 @@ input[type=range]{padding:0;accent-color:var(--acc);border:0;background:none;box
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,130px);background:var(--ink);color:#fff;border-radius:10px;padding:10px 16px;display:flex;gap:14px;align-items:center;font-size:14px;transition:transform .25s;z-index:50;white-space:nowrap}
 #toast.show{transform:translate(-50%,0)}
 #toast button{color:#9fd8c5;font-weight:600}
+/* 仪表盘 */
+.dash{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;align-items:start}
+.s8{grid-column:span 8}.s4{grid-column:span 4}
+.cap{margin:2px 0 0;font-size:13px;color:var(--faint);line-height:1.45}
+.stat .d{font-size:13px;color:var(--muted)}.stat .d b{font-weight:600;color:#006300}
+.vchart{position:relative;height:190px;margin:4px 20px 0 52px}
+.vchart .grid{position:absolute;inset:0 0 24px 0}
+.vchart .gl{position:absolute;left:0;right:0;border-top:1px solid #ecebe6}
+.vchart .gl span{position:absolute;right:calc(100% + 8px);top:-9px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.vchart .gl.base{border-top-color:#c3c2b7}
+.vchart .cols2{position:absolute;inset:0 0 0 0;display:flex;gap:4px}
+.vchart .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:default;min-width:0}
+.vchart .c .b{width:62%;max-width:30px;background:var(--acc);border-radius:4px 4px 0 0;position:relative;transition:opacity .15s}
+.vchart .c.cur .b{background:#2f6f5e}.vchart .c:not(.cur) .b{background:#7fb0a1}
+.vchart .c .v{font-size:12px;color:var(--ink);font-weight:600;margin-bottom:2px;font-variant-numeric:tabular-nums}
+.vchart .c .x{height:24px;line-height:24px;font-size:12px;color:var(--faint);white-space:nowrap}
+.vchart .c:hover .b{opacity:.8}
+.vchart .emptymsg{position:absolute;inset:30% 0 auto;text-align:center;color:var(--faint);font-size:14px}
+.fig{position:relative;height:214px;margin:0 8px 8px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.bul{padding:12px 20px;border-top:1px solid var(--line);display:grid;gap:8px}
+.bul .l1{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.bul .l1 b{font-weight:500;overflow-wrap:anywhere}
+.track{position:relative;height:12px;background:var(--soft);border-radius:6px;margin:4px 0}
+.track i{position:absolute;left:0;top:0;bottom:0;background:var(--acc);border-radius:6px;min-width:0}
+.track em{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink);border-radius:1px;box-shadow:0 0 0 2px #fff}
+.bul .nums{display:flex;gap:14px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);padding:0 20px 14px}
+.legend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.legend i.tick{width:2px;height:12px;border-radius:1px;background:var(--ink)}
+.hbars{padding:0 20px 16px;display:grid;gap:10px}
+.hb{display:grid;grid-template-columns:56px minmax(0,1fr) 28px;gap:10px;align-items:center;font-size:14px;cursor:default}
+.hb .tr{height:12px;background:var(--soft);border-radius:0 4px 4px 0}
+.hb .tr i{display:block;height:100%;background:var(--acc);border-radius:0 4px 4px 0}
+.hb .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.hb small{grid-column:2/-1;margin-top:-8px;font-size:12px;color:var(--muted)}
+.stack{display:flex;height:16px;margin:4px 20px 10px;border-radius:4px;overflow:hidden;gap:2px;background:#fff}
+.stack i{display:block;height:100%;background:var(--c);cursor:default}
+.stack.none{background:var(--soft)}
+#tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;line-height:1.45;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity .1s}
+#tip.on{opacity:1}
+
 /* 目标 */
 .goal{padding:20px;display:grid;gap:14px}
 .goal .gt{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
@@ -210,7 +253,8 @@ details.rv summary{cursor:pointer;display:flex;justify-content:space-between;gap
 details.rv p{margin:6px 0 0;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
 details.rv b{font-weight:500;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){#toast{transition:none}}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:minmax(0,1fr)}.s8{grid-column:span 12}.s4{grid-column:span 6}}
+@media(max-width:700px){.s4{grid-column:span 12}.vchart{margin-left:40px;margin-right:12px}.vchart .c:nth-child(odd) .x{visibility:hidden}}
 @media(max-width:760px){
   .app{grid-template-columns:minmax(0,1fr)}
   .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:30;flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
@@ -244,40 +288,48 @@ details.rv b{font-weight:500;color:var(--muted)}
       <div class="ph"><div><h1 id="greet">你好</h1><p id="today"></p></div></div>
       <div id="ovBanner"></div>
       <div class="stats" id="stats"></div>
-      <div class="cols">
-        <div class="col">
-          <section class="box panel">
-            <div class="hd"><h2>目标进度</h2><a class="more" href="#goals">全部目标 →</a></div>
-            <div id="ovGoals"></div>
-          </section>
-          <section class="box panel">
-            <div class="hd"><h2>本周要推进 <span class="tag" id="ovWeekTag"></span></h2><a class="more" href="#goals">去挑小步骤 →</a></div>
-            <div id="ovWeek"></div>
-          </section>
-          <section class="box panel">
-            <div class="hd"><h2>接下来要做</h2><a class="more" href="#todos">全部待办 →</a></div>
-            <div id="ovTodos"></div>
-          </section>
-        </div>
-        <div class="col">
-          <section class="box panel">
-            <div class="hd"><h2>心愿预算</h2><a class="more" href="#wishes">想买清单 →</a></div>
-            <div id="ovBudget"></div>
-            <div id="ovWishes"></div>
-          </section>
-          <section class="box panel">
-            <div class="hd"><h2>项目进展</h2><a class="more" href="#projects">全部项目 →</a></div>
-            <div id="ovProjects"></div>
-          </section>
-          <section class="box panel">
-            <div class="hd"><h2>快捷导航</h2></div>
-            <div class="nav" id="nav"></div>
-          </section>
-          <section class="box panel">
-            <div class="hd"><h2>最近动态</h2></div>
-            <ul class="feed" id="feed"></ul>
-          </section>
-        </div>
+      <div class="dash">
+        <section class="box panel s8">
+          <div class="hd"><div><h2>每周完成的小步骤</h2><p class="cap" id="cWeeksCap"></p></div><a class="more" href="#goals">去目标 →</a></div>
+          <div class="vchart" id="cWeeks"></div>
+        </section>
+        <section class="box panel s4">
+          <div class="hd"><div><h2>每周回顾打分</h2><p class="cap" id="cScoreCap"></p></div><a class="more" href="#review">去回顾 →</a></div>
+          <div class="fig" id="cScore"><svg role="img" aria-label="最近 12 周回顾打分折线图"></svg></div>
+        </section>
+
+        <section class="box panel s8">
+          <div class="hd"><div><h2>目标：完成 vs 时间</h2><p class="cap">长条是已完成的比例，竖线是时间已经过去的比例；长条超过竖线就是进度领先</p></div><a class="more" href="#goals">全部目标 →</a></div>
+          <div id="cGoals"></div>
+        </section>
+        <section class="box panel s4">
+          <div class="hd"><h2>本周要推进 <span class="tag" id="ovWeekTag"></span></h2><a class="more" href="#goals">去挑 →</a></div>
+          <div id="ovWeek"></div>
+        </section>
+
+        <section class="box panel s4">
+          <div class="hd"><div><h2>待办分布</h2><p class="cap" id="cTodoCap">按黎记分类，未完成的待办</p></div><a class="more" href="#todos">全部 →</a></div>
+          <div id="cTodos"></div>
+        </section>
+        <section class="box panel s4">
+          <div class="hd"><div><h2>项目状态</h2><p class="cap" id="cProjCap"></p></div><a class="more" href="#projects">全部 →</a></div>
+          <div id="cProj"></div>
+        </section>
+        <section class="box panel s4">
+          <div class="hd"><h2>心愿预算</h2><a class="more" href="#wishes">清单 →</a></div>
+          <div id="ovBudget"></div>
+          <div id="ovWishes"></div>
+        </section>
+
+        <section class="box panel s8">
+          <div class="hd"><h2>接下来要做</h2><a class="more" href="#todos">全部待办 →</a></div>
+          <div id="ovTodos"></div>
+        </section>
+        <section class="box panel s4">
+          <div class="hd"><h2>最近动态</h2></div>
+          <ul class="feed" id="feed"></ul>
+          <div class="nav" id="nav" style="border-top:1px solid var(--line);padding-top:12px"></div>
+        </section>
       </div>
     </section>
 
@@ -417,6 +469,7 @@ details.rv b{font-weight:500;color:var(--muted)}
 </form></div>
 
 <div id="toast"></div>
+<div id="tip" role="tooltip"></div>
 
 <script>
 {
@@ -486,7 +539,8 @@ async function sbRest(path, opts = {}){
 /* ---------- 数据 ---------- */
 const LISTS = {inbox:['收件箱','#9a7b2f'], work:['工作','#3a6ea5'], life:['生活','#c0613a'], study:['学习','#2f6f5e']};
 const PRI = {high:['高','#d64545'], medium:['中','#c98a12'], low:['低','#8e9aaf'], none:['','#d1d1d6']};
-const STATUS = [['dev','开发中','#c98a12'], ['test','测试中','#3a6ea5'], ['idea','构思中','#b0558f'], ['pause','暂停','#a1a1a6'], ['live','已上线','#2f6f5e']];
+// 项目状态用分类色板的前五个槽位，按固定顺序分配（图表和标签同色）
+const STATUS = [['dev','开发中','#2a78d6'], ['test','测试中','#eb6834'], ['idea','构思中','#1baf7a'], ['pause','暂停','#eda100'], ['live','已上线','#e87ba4']];
 const ST = Object.fromEntries(STATUS.map(s => [s[0], s]));
 const KEYS = ['station-projects', 'station-wishes', 'station-settings', 'station-goals', 'station-reviews'];
 let data = {'station-projects': store.get('station-projects', []), 'station-wishes': store.get('station-wishes', []), 'station-settings': store.get('station-settings', {budget: 0}),
@@ -624,45 +678,123 @@ function renderOverview(){
   const dow = new Date().getDay(), lastKey = wkOf(-1);
   $('ovBanner').innerHTML = !reviews()[wk] && (dow === 0 || dow >= 5) ? `<div class="banner"><span>这周快结束了，花几分钟写个回顾吧</span><a href="#review">写本周回顾 →</a></div>`
     : dow === 1 && !reviews()[lastKey] && goals().length ? `<div class="banner"><span>上周的回顾还没写</span><a href="#review" data-rw="-1">补写上周回顾 →</a></div>` : '';
+
+  // 每周完成的小步骤（最近 12 周）
+  const done = allSteps().filter(x => x.st.done && x.st.doneAt);
+  const weeks = Array.from({length: 12}, (_, i) => {
+    const off = i - 11, r = weekRange(off), key = weekKey(r[2]);
+    return {off, key, no: +key.split('-W')[1], range: r, count: done.filter(x => inRange(x.st.doneAt, r)).length, score: reviews()[key]?.score || 0};
+  });
+  const thisW = weeks[11].count, lastW = weeks[10].count, diff = thisW - lastW;
+
   const stats = [
     ['c-red', '#todos', '今天到期', loggedIn ? n.due : '–', loggedIn ? `待办共 ${n.open} 件` : '登录黎记后显示', ICON.clock],
-    ['c-yellow', '#goals', '本周小步骤', `${fd}<small style="margin-left:4px">/ ${focus.length}</small>`, focus.length ? (fd === focus.length ? '本周计划全部完成' : `还差 ${focus.length - fd} 步`) : '去目标里挑几步', ICON.step],
-    ['c-blue', '#goals', '目标进度', `${gAvg}<small style="margin-left:2px">%</small>`, goals().length ? `${goals().length} 个目标${behind ? ` · ${behind} 个落后` : ''}` : '还没有设定目标', ICON.target],
+    ['c-yellow', '#goals', '本周完成小步骤', thisW, diff > 0 ? `比上周 <b>+${diff}</b>` : diff < 0 ? `比上周 ${diff}` : (lastW ? '和上周持平' : `本周计划 ${fd}/${focus.length}`), ICON.step],
+    ['c-blue', '#goals', '目标平均完成', `${gAvg}<small style="margin-left:2px">%</small>`, goals().length ? `${goals().length} 个目标${behind ? ` · ${behind} 个落后` : ''}` : '还没有设定目标', ICON.target],
     b.budget ? ['c-green', '#wishes', '心愿预算剩余', `<small>RM</small>${Math.round(b.left).toLocaleString('en-MY')}`, `本月预算 ${money(b.budget)}`, ICON.bag]
              : ['c-green', '#wishes', '待购金额', `<small>RM</small>${Math.round(n.leftSum).toLocaleString('en-MY')}`, `${n.left} 件想买的`, ICON.bag]];
-  $('stats').innerHTML = stats.map(([c, href, k, v, s, ic]) => `<a class="stat ${c}" href="${href}"><div class="k">${k}${ic}</div><div class="v num">${v}</div><div class="s">${s}</div></a>`).join('');
+  $('stats').innerHTML = stats.map(([c, href, k, v, s, ic]) => `<a class="stat ${c}" href="${href}"><div class="k">${k}${ic}</div><div class="v num">${v}</div><div class="d">${s}</div></a>`).join('');
 
-  const next = tasks.filter(t => !t.completed).sort(byDue).slice(0, 6);
-  $('ovGoals').innerHTML = goals().length ? goals().map((g, i) => {
-    const gs = gsAll[i];
-    return `<div class="mini-goal"><div class="line1"><span>${esc(g.title)}</span>${gs.state[0] ? `<span class="state ${gs.state[1]}">${gs.state[0]}</span>` : ''}</div>
-      ${dual(g, gs)}<div class="meta">${g.deadline ? `<span>${esc(g.deadline.replace('-', ' 年 '))} 月截止${gs.months !== null ? ` · 还剩 ${gs.months} 个月` : ''}</span>` : ''}<span>${gs.done}/${gs.total} 个小步骤</span></div></div>`;
-  }).join('') : '<div class="notice"><span>写下一个两年后想达成的大目标，再拆成小步骤</span><button class="btn" data-new="goal">＋ 新目标</button></div>';
+  const total12 = weeks.reduce((s, w) => s + w.count, 0);
+  $('cWeeksCap').textContent = total12 ? `最近 12 周共完成 ${total12} 步，平均每周 ${(total12 / 12).toFixed(1)} 步` : '最近 12 周';
+  const max = Math.max(4, ...weeks.map(w => w.count)), step = max <= 6 ? 2 : max <= 12 ? 4 : Math.ceil(max / 3 / 5) * 5, top = Math.ceil(max / step) * step;
+  const ticks = []; for(let v = 0; v <= top; v += step) ticks.push(v);
+  $('cWeeks').innerHTML = `<div class="grid">${ticks.map(v => `<div class="gl ${v ? '' : 'base'}" style="bottom:${v / top * 100}%"><span>${v}</span></div>`).join('')}</div>
+    <div class="cols2">${weeks.map(w => `<div class="c ${w.off === 0 ? 'cur' : ''}" data-tip="第 ${w.no} 周 · ${md(w.range[0])} – ${md(w.range[1])}<br>完成 ${w.count} 个小步骤">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;width:100%">
+      ${w.off === 0 || (w.count && w.count === max) ? `<span class="v">${w.count}</span>` : ''}
+      <div class="b" style="height:calc(${w.count / top * 100}% - ${w.count ? 0 : 0}px)"></div></div>
+      <span class="x">${w.off === 0 ? '本周' : w.no}</span></div>`).join('')}</div>
+    ${total12 ? '' : '<div class="emptymsg">完成目标里的小步骤后，这里会显示每周推进了多少</div>'}`;
+
+  // 回顾打分折线
+  const scored = weeks.filter(w => w.score);
+  $('cScoreCap').textContent = scored.length ? `已打分 ${scored.length} 周，平均 ${(scored.reduce((s, w) => s + w.score, 0) / scored.length).toFixed(1)} 分` : '1–5 分，在每周回顾里打';
+  scoreWeeks = weeks;
+  drawScore();
+
+  // 目标：完成 vs 时间（子弹图）
+  $('cGoals').innerHTML = goals().length ? goals().map((g, i) => {
+    const gs = gsAll[i], t = gs.time ?? 0;
+    return `<div class="bul" data-tip="${esc(g.title)}<br>完成 ${gs.pct}% · 时间已过 ${gs.time ?? '–'}%"><div class="l1"><b>${esc(g.title)}</b>${gs.state[0] ? `<span class="state ${gs.state[1]}">${gs.state[0]}</span>` : ''}</div>
+      <div class="track"><i style="width:${gs.pct}%"></i>${gs.time !== null ? `<em style="left:calc(${t}% - 1px)"></em>` : ''}</div>
+      <div class="nums"><span>完成 <b class="num" style="color:var(--ink)">${gs.pct}%</b>（${gs.done}/${gs.total} 步）</span><span>时间已过 ${gs.time ?? '–'}%</span>${gs.months !== null ? `<span>还剩 ${gs.months} 个月</span>` : ''}</div></div>`;
+  }).join('') + `<div class="legend" style="padding-top:12px;border-top:1px solid var(--line)"><span><i style="--c:var(--acc)"></i>已完成</span><span><i class="tick"></i>时间已过</span></div>`
+    : '<div class="notice"><span>写下一个两年后想达成的大目标，再拆成小步骤</span><button class="btn" data-new="goal">＋ 新目标</button></div>';
+
   $('ovWeekTag').textContent = focus.length ? `${fd}/${focus.length}` : '';
   $('ovWeek').innerHTML = focus.length ? focus.map(stepRow).join('')
     : `<div class="notice"><span>${goals().length ? '本周还没挑小步骤。到目标页，点小步骤旁的“本周”就会出现在这里。' : '设定目标后，可以每周挑几步来推进。'}</span></div>`;
 
-  $('ovTodos').innerHTML = !loggedIn ? loginNotice : next.length ? next.map(todoRow).join('') : '<div class="empty">没有待办，轻松一下</div>';
+  // 待办分布（横向条形）
+  if(!loggedIn){ $('cTodos').innerHTML = loginNotice; $('cTodoCap').textContent = '按黎记分类，未完成的待办'; }
+  else {
+    const open = tasks.filter(t => !t.completed);
+    const rows = Object.entries(LISTS).map(([k, v]) => { const list = open.filter(t => (t.listId || 'inbox') === k);
+      return {name: v[0], n: list.length, late: list.filter(t => t.dueDate && daysFromToday(t.dueDate) < 0).length}; });
+    const mx = Math.max(1, ...rows.map(r => r.n));
+    $('cTodoCap').textContent = `共 ${open.length} 件未完成${n.due ? `，${n.due} 件今天或已逾期` : ''}`;
+    $('cTodos').innerHTML = `<div class="hbars">${rows.map(r => `<div class="hb" data-tip="${r.name}：${r.n} 件未完成${r.late ? `，${r.late} 件逾期` : ''}">
+      <span>${r.name}</span><div class="tr"><i style="width:${r.n / mx * 100}%"></i></div><span class="n">${r.n}</span>${r.late ? `<small>${r.late} 件逾期</small>` : ''}</div>`).join('')}</div>`;
+  }
 
-  const order = {dev:0, test:1, idea:2, pause:3, live:4};
-  const act = projects().filter(p => p.status !== 'live').sort((a, b) => (order[a.status] ?? 5) - (order[b.status] ?? 5)).slice(0, 5);
-  $('ovProjects').innerHTML = act.length ? act.map(p => {
-    const s = ST[p.status] || ST.dev, prog = Math.max(0, Math.min(100, +p.progress || 0));
-    return `<div class="mini-proj"><div class="line1"><span class="name">${esc(p.name)}</span><span class="pill" style="--c:${s[2]}">${s[1]} · <span class="num">${prog}%</span></span></div>
-      <div class="bar"><i style="width:${prog}%"></i></div>${p.next ? `<div class="meta">下一步：${esc(p.next)}</div>` : ''}</div>`;
-  }).join('') : '<div class="notice"><span>还没有进行中的项目</span><button class="btn" data-new="proj">＋ 新项目</button></div>';
+  // 项目状态（单条堆叠）
+  const all = projects(), counts = STATUS.map(s => ({s, n: all.filter(p => p.status === s[0]).length}));
+  $('cProjCap').textContent = all.length ? `${all.length} 个项目，${n.active} 个正在推进，平均进度 ${n.avg}%` : '还没有项目';
+  $('cProj').innerHTML = all.length ? `<div class="stack">${counts.filter(c => c.n).map(c => `<i style="--c:${c.s[2]};flex:${c.n}" data-tip="${c.s[1]}：${c.n} 个"></i>`).join('')}</div>
+    <div class="legend">${counts.map(c => `<span><i style="--c:${c.s[2]}"></i>${c.s[1]} ${c.n}</span>`).join('')}</div>
+    ${all.filter(p => p.status === 'dev' || p.status === 'test').slice(0, 3).map(p => { const prog = Math.max(0, Math.min(100, +p.progress || 0));
+      return `<div class="mini-proj"><div class="line1"><span class="name">${esc(p.name)}</span><span class="num" style="font-size:13px">${prog}%</span></div><div class="bar"><i style="width:${prog}%"></i></div>${p.next ? `<div class="meta">下一步：${esc(p.next)}</div>` : ''}</div>`; }).join('')}`
+    : '<div class="notice"><span>还没有项目</span><button class="btn" data-new="proj">＋ 新项目</button></div>';
 
   $('ovBudget').innerHTML = budgetBlock(b);
-  const top = wishes().filter(w => !w.bought).sort(wishSorter('pri')).slice(0, 3);
-  $('ovWishes').innerHTML = top.map(w => `<div class="row"><span class="dot" style="background:${(PRI[w.priority] || PRI.medium)[1]}"></span>
+  const topW = wishes().filter(w => !w.bought).sort(wishSorter('pri')).slice(0, 3);
+  $('ovWishes').innerHTML = topW.map(w => `<div class="row"><span class="dot" style="background:${(PRI[w.priority] || PRI.medium)[1]}"></span>
     <div class="t">${esc(w.name)}${fits(w, b) ? '<span class="fit">预算内</span>' : ''}</div><span class="num" style="white-space:nowrap">${w.price != null ? money(w.price) : '—'}</span></div>`).join('');
 
+  const next = tasks.filter(t => !t.completed).sort(byDue).slice(0, 6);
+  $('ovTodos').innerHTML = !loggedIn ? loginNotice : next.length ? next.map(todoRow).join('') : '<div class="empty">没有待办，轻松一下</div>';
+
   const items = [['黎记', 'https://lai75.github.io/liji-app/', '黎'], ['黎记仓库', 'https://github.com/Lai75/liji-app', 'G']]
-    .concat(projects().filter(p => safeUrl(p.link)).slice(0, 7).map(p => [p.name, p.link, p.name.trim().charAt(0).toUpperCase()]));
+    .concat(projects().filter(p => safeUrl(p.link)).slice(0, 4).map(p => [p.name, p.link, p.name.trim().charAt(0).toUpperCase()]));
   $('nav').innerHTML = items.map(([name, url, ch]) => `<a href="${esc(url)}" target="_blank" rel="noopener"><span class="ic">${esc(ch)}</span>${esc(name)}</a>`).join('');
-  $('feed').innerHTML = feed.length ? feed.slice(0, 6).map(f => `<li style="--c:${f.color}">${esc(f.text)}<time>${ago(f.at)}</time></li>`).join('')
+  $('feed').innerHTML = feed.length ? feed.slice(0, 5).map(f => `<li style="--c:${f.color}">${esc(f.text)}<time>${ago(f.at)}</time></li>`).join('')
     : '<li>这里会记录你在工作台上的操作<time>添加项目或心愿后显示</time></li>';
 }
+
+// 回顾打分折线：按实际像素绘制，尺寸变化时重画
+let scoreWeeks = [];
+function drawScore(){
+  const box = $('cScore'), s = box.querySelector('svg'), W = box.clientWidth, H = box.clientHeight;
+  if(!W || !H) return;
+  const L = 26, R = 10, T = 12, B = 26, pw = W - L - R, ph = H - T - B;
+  const x = i => L + (scoreWeeks.length > 1 ? i / (scoreWeeks.length - 1) : .5) * pw, y = v => T + (5 - v) / 4 * ph;
+  let g = '';
+  for(let v = 1; v <= 5; v++) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 1 ? '#c3c2b7' : '#ecebe6'}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="12" fill="#a1a1a6">${v}</text>`;
+  let path = '', pen = false;
+  scoreWeeks.forEach((w, i) => { if(w.score){ path += `${pen ? 'L' : 'M'}${x(i).toFixed(1)} ${y(w.score).toFixed(1)}`; pen = true; } else pen = false; });
+  const narrow = W < 300;
+  const lab = scoreWeeks.map((w, i) => (i === 11 || (!narrow && i % 3 === 2) || (narrow && i % 4 === 3)) ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="12" fill="#a1a1a6">${i === 11 ? '本周' : w.no}</text>` : '').join('');
+  const dots = scoreWeeks.map((w, i) => w.score ? `<circle cx="${x(i)}" cy="${y(w.score)}" r="4.5" fill="#2f6f5e" stroke="#fff" stroke-width="2"/>` : '').join('');
+  const hits = scoreWeeks.map((w, i) => `<rect x="${x(i) - pw / 22}" y="${T}" width="${pw / 11}" height="${ph}" fill="transparent" data-tip="第 ${w.no} 周<br>${w.score ? w.score + ' 分' : '没有打分'}"/>`).join('');
+  const none = scoreWeeks.some(w => w.score) ? '' : `<text x="${L + pw / 2}" y="${T + ph / 2}" text-anchor="middle" font-size="13" fill="#a1a1a6">写回顾并打分后显示</text>`;
+  s.innerHTML = g + lab + `<path d="${path}" fill="none" stroke="#2f6f5e" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>` + dots + none + hits;
+}
+const scoreRO = new ResizeObserver(drawScore);
+scoreRO.observe($('cScore'));
+
+// 悬停提示
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest?.('[data-tip]'), tip = $('tip');
+  if(!el){ tip.classList.remove('on'); return; }
+  tip.innerHTML = el.getAttribute('data-tip'); tip.classList.add('on');
+});
+document.addEventListener('mousemove', e => {
+  const tip = $('tip'); if(!tip.classList.contains('on')) return;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.min(window.innerWidth - w - 8, e.clientX + 14) + 'px';
+  tip.style.top = (e.clientY - h - 12 < 4 ? e.clientY + 16 : e.clientY - h - 12) + 'px';
+});
 function budgetBlock(b){
   const n = numbers();
   if(!b.budget) return `<div class="budget"><div class="big num">${money(n.leftSum)}</div><div class="sub"><span>待购合计 · ${n.left} 件</span><a class="more" href="#prefs">设置每月预算</a></div></div>`;
