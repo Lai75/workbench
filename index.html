@@ -684,6 +684,7 @@ const PRI = {high:['高','#d64545'], medium:['中','#c98a12'], low:['低','#8e9a
 // 项目状态用分类色板的前六个槽位，按固定顺序分配（图表和标签同色）
 const STATUS = [['dev','开发中','#2a78d6'], ['test','测试中','#eb6834'], ['idea','构思中','#1baf7a'], ['pause','暂停','#eda100'], ['live','已上线','#e87ba4'], ['hw','作业','#6250d6']];
 const ST = Object.fromEntries(STATUS.map(s => [s[0], s]));
+const stName = (p, s) => p.kind === 'work' && s[0] === 'dev' ? '进行中' : s[1];
 const KEYS = ['station-projects', 'station-settings', 'station-goals', 'station-reviews', 'station-services', 'station-notes', 'station-ideas', 'station-videos'];
 let data = {'station-projects': store.get('station-projects', []), 'station-settings': store.get('station-settings', {budget: 0}),
   'station-goals': store.get('station-goals', []), 'station-reviews': store.get('station-reviews', {})};
@@ -889,7 +890,7 @@ function renderOverview(){
   $('ovProj').innerHTML = act.length ? act.map(p => { const s = ST[p.status], prog = projProg(p), gh = p.repo && GH[p.repo], bugs = (p.bugs || []).filter(b => !b.fixed).length, t = p.tasks || [];
     return `<a class="orow" href="#proj-${esc(p.id)}"><div class="l1"><b>${esc(p.name)}</b><span class="num">${prog}%</span></div>
       <div class="bar"><i style="width:${prog}%"></i></div>
-      <div class="meta"><span class="pill" style="--c:${s[2]}">${s[1]}</span>${t.length ? `<span>任务 ${t.filter(x => x.status === 'done').length}/${t.length}</span>` : ''}${bugs ? `<span style="color:var(--bad)">${bugs} 个 bug</span>` : ''}${gh?.info ? `<span>${agoIso(gh.info.pushed)}提交</span>` : ''}</div></a>`; }).join('')
+      <div class="meta"><span class="pill" style="--c:${s[2]}">${stName(p, s)}</span>${t.length ? `<span>任务 ${t.filter(x => x.status === 'done').length}/${t.length}</span>` : ''}${bugs ? `<span style="color:var(--bad)">${bugs} 个 bug</span>` : ''}${gh?.info ? `<span>${agoIso(gh.info.pushed)}提交</span>` : ''}</div></a>`; }).join('')
     : '<div class="notice"><span>还没有进行中的项目</span><button class="btn" data-new="proj">＋ 新项目</button></div>';
 }
 
@@ -1011,10 +1012,10 @@ function logPanel(p){
   const logs = p.logs || [];
   return `<section class="box panel s4"><div class="hd"><h2>进度记录</h2><span class="sub">${logs.length ? logs.length + ' 条' : ''}</span></div>
     <form class="inl" data-form="log" style="display:grid;gap:8px"><input name="date" type="date" value="${todayStr()}">
-      <textarea name="text" placeholder="今天做了什么、做到哪一步" style="min-height:70px" required></textarea>
-      <input name="next" placeholder="下一步要做什么（可选，会更新项目的“下一步”）" value="">
+      <textarea name="text" placeholder="做了什么" style="min-height:70px" required></textarea>
+      <input name="next" placeholder="下一步要做什么" value="">
       <div><button class="btn primary" type="submit">记录进度</button></div></form>
-    ${logs.map(l => `<div class="ver" data-lid="${esc(l.id)}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${esc(l.date ? md(l.date) : '')}</b><button class="sub" data-act="l-del" style="color:var(--faint)">删除</button></div><p>${esc(l.text)}</p>${l.next ? `<p style="color:var(--faint)">→ 下一步：${esc(l.next)}</p>` : ''}</div>`).join('') || '<div class="empty" style="padding:14px">还没有进度记录。每做完一段就记一笔，下次打开就知道做到哪了</div>'}
+    ${logs.map(l => `<div class="ver" data-lid="${esc(l.id)}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${esc(l.date ? md(l.date) : '')}</b><button class="sub" data-act="l-del" style="color:var(--faint)">删除</button></div><p>${esc(l.text)}</p>${l.next ? `<p style="color:var(--faint)">→ 下一步：${esc(l.next)}</p>` : ''}</div>`).join('') || '<div class="empty" style="padding:14px">还没有进度记录</div>'}
   </section>`;
 }
 function projSummary(p){
@@ -1035,7 +1036,7 @@ function renderProjects(){
   $('projList').innerHTML = list.length ? list.map(p => {
     const s = ST[p.status] || ST.dev, prog = projProg(p);
     return `<a class="proj pcard" href="#proj-${esc(p.id)}">
-      <div class="top"><div><span class="pill" style="--c:${s[2]}">${s[1]}</span>${p.kind === 'work' ? ' <span class="plat">工作</span>' : ''}<div class="name">${esc(p.name)}</div></div><span class="num" style="font-weight:600">${prog}%</span></div>
+      <div class="top"><div><span class="pill" style="--c:${s[2]}">${stName(p, s)}</span>${p.kind === 'work' ? ' <span class="plat">工作</span>' : ''}<div class="name">${esc(p.name)}</div></div><span class="num" style="font-weight:600">${prog}%</span></div>
       <div class="bar"><i style="width:${prog}%"></i></div>
       ${p.next ? `<div class="next"><b>下一步 </b>${esc(p.next)}</div>` : ''}
       ${projSummary(p)}</a>`;
@@ -1064,8 +1065,8 @@ function renderProjDetail(){
   const svc = services().filter(x => x.project === p.id), nts = notes().filter(x => x.project === p.id);
   box.innerHTML = `<a class="back" href="#projects">← 全部项目</a>
     <section class="box phead">
-      <div class="ph"><h1>${esc(p.name)} <span class="pill" style="--c:${s[2]};font-size:14px">${s[1]}</span></h1>
-        <div style="display:flex;gap:8px"><button class="btn" data-act="p-edit">编辑</button><button class="btn" data-act="p-del">删除</button></div></div>
+      <div class="ph"><h1>${esc(p.name)} <span class="pill" style="--c:${s[2]};font-size:14px">${stName(p, s)}</span></h1>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">${svc.length ? '' : '<button class="btn" data-act="svc-add">＋ 服务</button>'}${nts.length ? '' : '<button class="btn" data-act="note-add">＋ 笔记</button>'}<button class="btn" data-act="p-edit">编辑</button><button class="btn" data-act="p-del">删除</button></div></div>
       <div class="links">${p.repo ? `<a class="btn" href="https://github.com/${esc(p.repo)}" target="_blank" rel="noopener">GitHub ↗</a>` : ''}
         ${safeUrl(p.site) ? `<a class="btn" href="${esc(p.site)}" target="_blank" rel="noopener">打开网站 ↗</a><span class="sub" style="align-self:center">${siteLabel(p.site)}</span>` : ''}
         ${safeUrl(p.link) ? `<a class="btn" href="${esc(p.link)}" target="_blank" rel="noopener">其他链接 ↗</a>` : ''}</div>
@@ -1075,14 +1076,13 @@ function renderProjDetail(){
     </section>
     <div class="dash">
       <section class="box panel s8"><div class="hd"><h2>任务看板</h2><span class="sub">用 ← → 移动任务</span></div><div class="kanban">${col('todo', '待做')}${col('doing', '进行中')}${col('done', '完成')}</div></section>
-      ${p.kind === 'work' ? logPanel(p) : `<section class="box panel s4"><div class="hd"><h2>GitHub</h2>${p.repo ? '<button class="btn" data-act="gh-refresh">刷新</button>' : ''}</div>
-        ${!p.repo ? '<div class="notice"><span>填写 GitHub 仓库后，这里会自动显示最近的提交</span><button class="btn" data-act="p-edit">填写仓库</button></div>'
-          : !gh ? '<div class="empty">读取中…</div>'
+      ${p.kind === 'work' || !p.repo ? logPanel(p) : `<section class="box panel s4"><div class="hd"><h2>GitHub</h2>${p.repo ? '<button class="btn" data-act="gh-refresh">刷新</button>' : ''}</div>
+        ${!gh ? '<div class="empty">读取中…</div>'
           : `${gh.err ? `<div class="notice" style="color:var(--red)">${esc(gh.err)}</div>` : ''}
             ${gh.info ? `<div class="chips" style="padding:0 20px 10px"><span>最后提交 <b>${agoIso(gh.info.pushed)}</b></span><span>未关闭 issue <b>${gh.info.issues}</b></span><span>分支 ${esc(gh.info.branch)}</span></div>` : ''}
             ${(gh.commits || []).map(c => `<a class="commit" href="${esc(c.url)}" target="_blank" rel="noopener"><span class="m">${esc(c.msg)}</span><span class="sub">${agoIso(c.at)}</span><small>${esc(c.sha)} · ${esc(c.author)}</small></a>`).join('')}`}
-      </section>
-      <section class="box panel s4"><div class="hd"><h2>Bug <span class="tag">${openBugs.length} 个未修</span></h2></div>
+      </section>`}
+      ${p.kind === 'work' ? '' : `<section class="box panel s4"><div class="hd"><h2>Bug <span class="tag">${openBugs.length} 个未修</span></h2></div>
         <form class="inl" data-form="bug"><input name="title" placeholder="描述一个问题，回车保存" required><select name="sev"><option value="high">严重</option><option value="mid" selected>一般</option><option value="low">轻微</option></select></form>
         ${openBugs.sort((a, b) => (sevOrder[a.sev] ?? 1) - (sevOrder[b.sev] ?? 1)).map(bugRow).join('') || '<div class="empty" style="padding:14px">没有未修的 bug</div>'}
         ${fixedBugs.length ? `<details style="border-top:1px solid var(--line)"><summary class="grp" style="cursor:pointer;border:0">已修好 ${fixedBugs.length} 个</summary>${fixedBugs.map(bugRow).join('')}</details>` : ''}
@@ -1093,12 +1093,12 @@ function renderProjDetail(){
         ${p.versions.map(v => `<div class="ver" data-vid="${esc(v.id)}"><div style="display:flex;justify-content:space-between;gap:8px"><span><b>${esc(v.ver)}</b> <span class="sub" style="display:inline">${esc(v.date || '')}</span></span><button class="sub" data-act="v-del" style="color:var(--faint)">删除</button></div>${v.notes ? `<p>${esc(v.notes)}</p>` : ''}</div>`).join('') || '<div class="empty" style="padding:14px">还没有发布记录</div>'}
       </section>
       `}
-      <section class="box panel s4"><div class="hd"><h2>用到的服务</h2><button class="btn" data-act="svc-add">＋ 添加</button></div>
-        ${svc.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto"><div><div class="t">${esc(x.name)}</div><div class="meta"><span>${esc(x.cat || '')}</span>${x.renew ? `<span>${esc(x.renew)} 续费</span>` : ''}</div></div><span class="num">${svcCost(x)}</span></div>`).join('') || '<div class="empty" style="padding:14px">还没有关联服务</div>'}
-      </section>
-      <section class="box panel s4"><div class="hd"><h2>相关笔记</h2><button class="btn" data-act="note-add">＋ 新笔记</button></div>
-        ${nts.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto;cursor:pointer" data-act="note-open" data-nid="${esc(x.id)}"><div class="t">${esc(x.title)}</div><span class="sub">${ago(x.upd || x.at)}</span></div>`).join('') || '<div class="empty" style="padding:14px">还没有相关笔记</div>'}
-      </section>
+      ${svc.length ? `<section class="box panel s4"><div class="hd"><h2>用到的服务</h2><button class="btn" data-act="svc-add">＋ 添加</button></div>
+        ${svc.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto"><div><div class="t">${esc(x.name)}</div><div class="meta"><span>${esc(x.cat || '')}</span>${x.renew ? `<span>${esc(x.renew)} 续费</span>` : ''}</div></div><span class="num">${svcCost(x)}</span></div>`).join('') }
+      </section>` : ''}
+      ${nts.length ? `<section class="box panel s4"><div class="hd"><h2>相关笔记</h2><button class="btn" data-act="note-add">＋ 新笔记</button></div>
+        ${nts.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto;cursor:pointer" data-act="note-open" data-nid="${esc(x.id)}"><div class="t">${esc(x.title)}</div><span class="sub">${ago(x.upd || x.at)}</span></div>`).join('') }
+      </section>` : ''}
     </div>`;
   if(p.repo && !gh) ghLoad(p.repo).then(renderProjDetail);
 }
