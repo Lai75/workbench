@@ -413,7 +413,7 @@ details.rv b{font-weight:500;color:var(--muted)}
   <nav class="side" id="side">
     <div class="brand">我的工作台</div>
     <a href="#overview" data-p="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/></svg>总览</a>
-    <div class="gt2">开发</div>
+    <div class="gt2">工作</div>
     <a href="#projects" data-p="projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>项目<span class="cnt" id="c-projects"></span></a>
     <a href="#services" data-p="services" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>服务<span class="cnt" id="c-services"></span></a>
     <a href="#notes" data-p="notes" class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h4"/></svg>笔记<span class="cnt" id="c-notes"></span></a>
@@ -475,7 +475,7 @@ details.rv b{font-weight:500;color:var(--muted)}
     <section class="page" id="p-projects">
       <div class="ph"><div><h1>项目</h1><p id="projSub"></p></div><button class="btn primary" data-new="proj">＋ 新项目</button></div>
       <section class="box panel">
-        <div class="hd"><div class="seg" id="projSeg"></div><button class="btn" id="ghRefresh">刷新 GitHub</button></div>
+        <div class="hd"><div style="display:flex;gap:8px;flex-wrap:wrap"><div class="seg" id="projKind"></div><div class="seg" id="projSeg"></div></div><button class="btn" id="ghRefresh">刷新 GitHub</button></div>
         <div class="grid" id="projList"></div>
       </section>
     </section>
@@ -593,6 +593,7 @@ details.rv b{font-weight:500;color:var(--muted)}
 <div class="sheet" id="projSheet"><form id="projForm" class="box">
   <h3 id="projTitle">新项目</h3>
   <label>项目名<input id="p-name" required></label>
+  <label>类型<select id="p-kind"><option value="dev">开发（写代码）</option><option value="work">工作（不写代码，比如 SharePoint）</option></select></label>
   <div class="two"><label>状态<select id="p-status"></select></label><label>开始日期<input id="p-start" type="date"></label></div>
   <label>GitHub 仓库<input id="p-repo" placeholder="Lai75/liji-app 或仓库网址"></label>
   <label>线上网址（填了会出现在“我的 App”）<input id="p-site" type="url" placeholder="https://lai75.github.io/liji-app/"></label>
@@ -694,7 +695,7 @@ const services = () => data['station-services'], notes = () => data['station-not
 // 项目进度：有任务时按完成比例自动算，否则用手动填的进度
 const projProg = p => { const t = p.tasks || []; return t.length ? Math.round(t.filter(x => x.status === 'done').length / t.length * 100) : Math.max(0, Math.min(100, +p.progress || 0)); };
 let tasks = [], loggedIn = false;
-let ui = {todo: 'active', list: 'all', q: '', proj: 'all', rw: 0, score: 0, svc: 'all', ntag: 'all', nq: '', nopen: null, idea: 'all', pid: null, vplat: 'all'};
+let ui = {todo: 'active', list: 'all', q: '', proj: 'all', rw: 0, score: 0, svc: 'all', ntag: 'all', nq: '', nopen: null, idea: 'all', pid: null, pkind: 'all', vplat: 'all'};
 let editingProj = null;
 let feed = store.get('station-feed', []);
 let meta = store.get('station-sync-meta', {});
@@ -1006,23 +1007,35 @@ const APP_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#e87ba4', '#6250d6', '#eda
 const appColor = id => APP_COLORS[[...String(id)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % APP_COLORS.length];
 
 /* ---------- 渲染：项目列表 ---------- */
+function logPanel(p){
+  const logs = p.logs || [];
+  return `<section class="box panel s4"><div class="hd"><h2>进度记录</h2><span class="sub">${logs.length ? logs.length + ' 条' : ''}</span></div>
+    <form class="inl" data-form="log" style="display:grid;gap:8px"><input name="date" type="date" value="${todayStr()}">
+      <textarea name="text" placeholder="今天做了什么、做到哪一步" style="min-height:70px" required></textarea>
+      <input name="next" placeholder="下一步要做什么（可选，会更新项目的“下一步”）" value="">
+      <div><button class="btn primary" type="submit">记录进度</button></div></form>
+    ${logs.map(l => `<div class="ver" data-lid="${esc(l.id)}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${esc(l.date ? md(l.date) : '')}</b><button class="sub" data-act="l-del" style="color:var(--faint)">删除</button></div><p>${esc(l.text)}</p>${l.next ? `<p style="color:var(--faint)">→ 下一步：${esc(l.next)}</p>` : ''}</div>`).join('') || '<div class="empty" style="padding:14px">还没有进度记录。每做完一段就记一笔，下次打开就知道做到哪了</div>'}
+  </section>`;
+}
 function projSummary(p){
   const t = p.tasks || [], b = (p.bugs || []).filter(x => !x.fixed).length, v = (p.versions || [])[0], gh = p.repo && GH[p.repo];
   return `<div class="chips">${t.length ? `<span>任务 <b>${t.filter(x => x.status === 'done').length}/${t.length}</b></span>` : ''}
     ${b ? `<span>未修 bug <b style="color:var(--red)">${b}</b></span>` : ''}${v ? `<span>版本 <b>${esc(v.ver)}</b></span>` : ''}
-    ${gh?.info ? `<span>最后提交 ${agoIso(gh.info.pushed)}</span>` : ''}${p.site ? `<span>${siteLabel(p.site)}</span>` : ''}</div>`;
+    ${gh?.info ? `<span>最后提交 ${agoIso(gh.info.pushed)}</span>` : ''}${p.site ? `<span>${siteLabel(p.site)}</span>` : ''}${p.logs?.[0] ? `<span>最近进度 ${md(p.logs[0].date)}</span>` : ''}</div>`;
 }
 function renderProjects(){
-  const all = projects(), order = Object.fromEntries(STATUS.map((s, i) => [s[0], i]));
+  const every = projects(), order = Object.fromEntries(STATUS.map((s, i) => [s[0], i]));
+  const all = every.filter(p => ui.pkind === 'all' || (p.kind || 'dev') === ui.pkind);
   const n = numbers();
-  $('projSub').textContent = all.length ? `${all.length} 个项目，${n.active} 个正在推进。点卡片进入项目，管理任务、bug 和版本` : '记录你正在开发的软件';
+  $('projKind').innerHTML = [['all', '全部'], ['dev', '开发'], ['work', '工作']].map(([k, l]) => `<button data-k="${k}" class="${ui.pkind === k ? 'on' : ''}">${l} ${k === 'all' ? every.length : every.filter(p => (p.kind || 'dev') === k).length}</button>`).join('');
+  $('projSub').textContent = all.length ? `${all.length} 个项目，${n.active} 个正在推进。点卡片进入项目，管理任务和进度` : '记录在做的开发项目和工作';
   $('projSeg').innerHTML = [['all', '全部', all.length]].concat(STATUS.map(s => [s[0], s[1], all.filter(p => p.status === s[0]).length]))
     .map(([k, v, c]) => `<button data-s="${k}" class="${ui.proj === k ? 'on' : ''}">${v} ${c}</button>`).join('');
   const list = all.filter(p => ui.proj === 'all' || p.status === ui.proj).sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
   $('projList').innerHTML = list.length ? list.map(p => {
     const s = ST[p.status] || ST.dev, prog = projProg(p);
     return `<a class="proj pcard" href="#proj-${esc(p.id)}">
-      <div class="top"><div><span class="pill" style="--c:${s[2]}">${s[1]}</span><div class="name">${esc(p.name)}</div></div><span class="num" style="font-weight:600">${prog}%</span></div>
+      <div class="top"><div><span class="pill" style="--c:${s[2]}">${s[1]}</span>${p.kind === 'work' ? ' <span class="plat">工作</span>' : ''}<div class="name">${esc(p.name)}</div></div><span class="num" style="font-weight:600">${prog}%</span></div>
       <div class="bar"><i style="width:${prog}%"></i></div>
       ${p.next ? `<div class="next"><b>下一步 </b>${esc(p.next)}</div>` : ''}
       ${projSummary(p)}</a>`;
@@ -1062,7 +1075,7 @@ function renderProjDetail(){
     </section>
     <div class="dash">
       <section class="box panel s8"><div class="hd"><h2>任务看板</h2><span class="sub">用 ← → 移动任务</span></div><div class="kanban">${col('todo', '待做')}${col('doing', '进行中')}${col('done', '完成')}</div></section>
-      <section class="box panel s4"><div class="hd"><h2>GitHub</h2>${p.repo ? '<button class="btn" data-act="gh-refresh">刷新</button>' : ''}</div>
+      ${p.kind === 'work' ? logPanel(p) : `<section class="box panel s4"><div class="hd"><h2>GitHub</h2>${p.repo ? '<button class="btn" data-act="gh-refresh">刷新</button>' : ''}</div>
         ${!p.repo ? '<div class="notice"><span>填写 GitHub 仓库后，这里会自动显示最近的提交</span><button class="btn" data-act="p-edit">填写仓库</button></div>'
           : !gh ? '<div class="empty">读取中…</div>'
           : `${gh.err ? `<div class="notice" style="color:var(--red)">${esc(gh.err)}</div>` : ''}
@@ -1079,6 +1092,7 @@ function renderProjDetail(){
           <textarea name="notes" placeholder="这个版本改了什么" style="grid-column:1/-1;min-height:60px"></textarea><div style="grid-column:1/-1"><button class="btn primary" type="submit">记录版本</button></div></form>
         ${p.versions.map(v => `<div class="ver" data-vid="${esc(v.id)}"><div style="display:flex;justify-content:space-between;gap:8px"><span><b>${esc(v.ver)}</b> <span class="sub" style="display:inline">${esc(v.date || '')}</span></span><button class="sub" data-act="v-del" style="color:var(--faint)">删除</button></div>${v.notes ? `<p>${esc(v.notes)}</p>` : ''}</div>`).join('') || '<div class="empty" style="padding:14px">还没有发布记录</div>'}
       </section>
+      `}
       <section class="box panel s4"><div class="hd"><h2>用到的服务</h2><button class="btn" data-act="svc-add">＋ 添加</button></div>
         ${svc.map(x => `<div class="row" style="grid-template-columns:minmax(0,1fr) auto"><div><div class="t">${esc(x.name)}</div><div class="meta"><span>${esc(x.cat || '')}</span>${x.renew ? `<span>${esc(x.renew)} 续费</span>` : ''}</div></div><span class="num">${svcCost(x)}</span></div>`).join('') || '<div class="empty" style="padding:14px">还没有关联服务</div>'}
       </section>
@@ -1090,7 +1104,7 @@ function renderProjDetail(){
 }
 
 /* ---------- 服务与费用 ---------- */
-const SVC_CATS = ['数据库', '域名', '服务器/托管', '订阅', 'API', '其他'];
+const SVC_CATS = ['AI', '数据库', '域名', '服务器/托管', '订阅', 'API', '其他'];
 const CYCLE = {month: '月付', year: '年付', once: '一次性', free: '免费'};
 const svcMonthly = s => s.cycle === 'month' ? +s.cost || 0 : s.cycle === 'year' ? (+s.cost || 0) / 12 : 0;
 const svcCost = s => s.cycle === 'free' || !+s.cost ? '免费' : `${money(s.cost)}${s.cycle === 'month' ? '/月' : s.cycle === 'year' ? '/年' : ''}`;
@@ -1304,6 +1318,7 @@ function seg(id, attr, fn){ $(id).addEventListener('click', e => { const b = e.t
 seg('todoSeg', 'f', v => { ui.todo = v; $('todoSeg').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.f === v)); renderTodos(); });
 seg('listChips', 'l', v => { ui.list = v; renderTodos(); });
 seg('projSeg', 's', v => { ui.proj = v; renderProjects(); });
+seg('projKind', 'k', v => { ui.pkind = v; renderProjects(); });
 $('todoSearch').addEventListener('input', e => { ui.q = e.target.value.trim(); renderTodos(); });
 
 $('loginForm').addEventListener('submit', async e => {
@@ -1332,7 +1347,7 @@ function openProj(p){
   editingProj = p ? p.id : null; $('projTitle').textContent = p ? '编辑项目' : '新项目';
   $('p-name').value = p?.name || ''; $('p-status').value = p?.status || 'dev'; $('p-prog').value = p?.progress ?? 0; $('p-prog').oninput();
   $('p-next').value = p?.next || ''; $('p-link').value = p?.link || ''; $('p-start').value = p?.start || todayStr(); $('p-note').value = p?.note || '';
-  $('p-repo').value = p?.repo || ''; $('p-site').value = p?.site || '';
+  $('p-repo').value = p?.repo || ''; $('p-site').value = p?.site || ''; $('p-kind').value = p?.kind || 'dev';
   open('projSheet');
 }
 $('projForm').addEventListener('submit', e => {
@@ -1340,7 +1355,7 @@ $('projForm').addEventListener('submit', e => {
   const repoIn = $('p-repo').value.trim(), repo = normRepo(repoIn);
   if(repoIn && !repo){ toast('GitHub 仓库请写成 用户名/仓库名，例如 Lai75/liji-app'); return; }
   const rec = {name: $('p-name').value.trim(), status: $('p-status').value, progress: +$('p-prog').value || 0, repo, site: $('p-site').value.trim(),
-    next: $('p-next').value.trim(), link: $('p-link').value.trim(), start: $('p-start').value, note: $('p-note').value.trim()};
+    next: $('p-next').value.trim(), link: $('p-link').value.trim(), start: $('p-start').value, note: $('p-note').value.trim(), kind: $('p-kind').value};
   if(!rec.name) return;
   const ex = editingProj && projects().find(p => p.id === editingProj);
   if(ex){ log(`更新了项目「${rec.name}」`, 'var(--blue)'); Object.assign(ex, rec); }
@@ -1370,6 +1385,7 @@ function projAct(e){
   if(task && act === 't-del'){ p.tasks.splice(p.tasks.indexOf(task), 1); persist('station-projects'); renderProjDetail(); }
   if(bug && act === 'b-fix'){ bug.fixed = !bug.fixed; bug.fixedAt = bug.fixed ? todayStr() : undefined; if(bug.fixed) log(`修好 bug「${bug.title}」· ${p.name}`, 'var(--acc)'); persist('station-projects'); renderProjDetail(); }
   if(bug && act === 'b-del'){ p.bugs.splice(p.bugs.indexOf(bug), 1); persist('station-projects'); renderProjDetail(); }
+  if(act === 'l-del'){ const lid = b.closest('[data-lid]').dataset.lid; p.logs = (p.logs || []).filter(l => l.id !== lid); persist('station-projects'); renderProjDetail(); }
   if(act === 'v-del'){ const vid = b.closest('[data-vid]').dataset.vid; p.versions = p.versions.filter(v => v.id !== vid); persist('station-projects'); renderProjDetail(); }
   if(act === 'gh-refresh'){ toast('正在读取 GitHub…'); ghLoad(p.repo, true).then(() => { renderAll(); renderProjDetail(); }); }
   if(act === 'svc-add') openSvc(null, p.id);
@@ -1390,6 +1406,11 @@ $('projDetail').addEventListener('submit', e => {
   const p = findProj(ui.pid); if(!p) return;
   const v = Object.fromEntries(new FormData(f).entries());
   if(f.dataset.form === 'bug'){ if(!v.title.trim()) return; p.bugs.unshift({id: uid(), title: v.title.trim(), sev: v.sev, fixed: false, at: todayStr()}); log(`记录 bug「${v.title.trim()}」· ${p.name}`, 'var(--red)'); }
+  if(f.dataset.form === 'log'){ const text = v.text.trim(), next = v.next.trim(); if(!text) return;
+    (p.logs = p.logs || []).unshift({id: uid(), date: v.date || todayStr(), text, next});
+    p.logs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    if(next) p.next = next;
+    log(`项目「${p.name}」进度：${text.length > 30 ? text.slice(0, 30) + '…' : text}`, 'var(--blue)'); toast('进度已记录'); }
   if(f.dataset.form === 'ver'){ if(!v.ver.trim()) return; p.versions.unshift({id: uid(), ver: v.ver.trim(), date: v.date, notes: v.notes.trim()}); log(`${p.name} 发布了 ${v.ver.trim()}`, 'var(--acc)'); toast('版本已记录'); }
   persist('station-projects'); renderProjDetail();
   if(f.dataset.form === 'bug') document.querySelector('#projDetail form[data-form="bug"] input')?.focus();
